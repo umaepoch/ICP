@@ -133,7 +133,11 @@ def execute(filters=None):
 
 				differ_days = flt(diff_days)
 
-				
+				msgprint(_(order_work))
+				msgprint(_(rows[3]))
+				msgprint(_(rows[2]))
+				msgprint(_(temp_date))
+
 				if rows[3] <= rows[2] and rows[3] != temp_date:
 					full_tot_del_amt = full_tot_del_amt + rows[16]
 					
