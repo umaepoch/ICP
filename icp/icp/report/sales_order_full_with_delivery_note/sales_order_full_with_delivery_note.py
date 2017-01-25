@@ -63,7 +63,7 @@ def execute(filters=None):
 				diff_days = 0
 			else:
 				diff_days = rows[3] - rows[2]
-
+			
 			if rows[3] <= rows[2] and rows[3] != temp_date:
 				full_tot_del_amt = full_tot_del_amt + rows[16]
 
@@ -132,11 +132,6 @@ def execute(filters=None):
 				item_pend_qty = rows[9] - rows[11] - item_pend_qty
 
 				differ_days = flt(diff_days)
-
-				msgprint(_(order_work))
-				msgprint(_(rows[3]))
-				msgprint(_(rows[2]))
-				msgprint(_(temp_date))
 
 				if rows[3] <= rows[2] and rows[3] != temp_date:
 					full_tot_del_amt = full_tot_del_amt + rows[16]
@@ -274,7 +269,11 @@ def get_item_map(filters):
                 qty_dict.del_qty = d.del_qty
                 qty_dict.delivered_qty = d.delivered_qty
                 qty_dict.so_date = d.date
-		qty_dict.so_del_date = d.sodel_date
+		temp_date = getdate("2001-01-01")
+		if d.sodel_date == " ":
+			qty_dict.so_del_date = temp_date
+		else:
+			qty_dict.so_del_date = d.sodel_date
         #        qty_dict.del_date = d.delivery_date
                 qty_dict.customer = d.customer
 		qty_dict.assigned_to = d.assigned_to
@@ -302,6 +301,14 @@ def get_item_map(filters):
         	        qty_dict.del_qty = d.del_qty
         	        qty_dict.delivered_qty = d.delivered_qty
         	        qty_dict.so_date = d.date
+			temp_date = getdate("2001-01-01")
+			
+			if d.sodel_date == " ":
+				qty_dict.so_del_date = temp_date
+			
+			else:
+				qty_dict.so_del_date = d.sodel_date
+
 			qty_dict.so_del_date = d.sodel_date
         	#        qty_dict.del_date = d.delivery_date
         	        qty_dict.customer = d.customer
