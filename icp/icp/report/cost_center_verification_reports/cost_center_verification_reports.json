@@ -1,0 +1,20 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2017-02-03 15:48:10.695182", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "Standard", 
+ "modified": "2017-02-03 17:35:03.081347", 
+ "modified_by": "Administrator", 
+ "module": "Icp", 
+ "name": "Cost Center Verification Reports", 
+ "owner": "Administrator", 
+ "query": "select si.name as sales_invoice, si.income_account as income_account, si.expense_account as expense_account, si.cost_center as cost_center\nfrom `tabSales Invoice Item` si\norder by income_account\n", 
+ "ref_doctype": "Sales Invoice Item", 
+ "report_name": "Cost Center Verification Reports", 
+ "report_type": "Script Report"
+}
