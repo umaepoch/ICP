@@ -8,13 +8,13 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "Standard", 
- "modified": "2017-02-03 17:35:03.081347", 
+ "modified": "2017-02-06 12:45:57.714933", 
  "modified_by": "Administrator", 
  "module": "Icp", 
  "name": "Cost Center Verification Reports", 
  "owner": "Administrator", 
  "query": "select si.name as sales_invoice, si.income_account as income_account, si.expense_account as expense_account, si.cost_center as cost_center\nfrom `tabSales Invoice Item` si\norder by income_account\n", 
- "ref_doctype": "Sales Invoice Item", 
+ "ref_doctype": "Sales Invoice", 
  "report_name": "Cost Center Verification Reports", 
  "report_type": "Script Report"
 }

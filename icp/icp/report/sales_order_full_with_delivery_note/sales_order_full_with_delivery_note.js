@@ -7,7 +7,8 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
 		{
                         "fieldname":"assigned_to",
                         "label": __("Assigned To"),
-                        "fieldtype": "Data",
+                        "fieldtype": "Link",
+			"options": "User",
                         "reqd": 0
                 },
 	        {
@@ -19,23 +20,23 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                 },
                 
                 {      "fieldname":"from_date",
-                        "label": __("From Date"),
+                        "label": __("Committed Delivery From Date"),
                         "fieldtype": "Date",
                         "width": "80"
     //                    "default": sys_defaults.year_start_date,
                 },
                 {
                         "fieldname":"to_date",
-                        "label": __("To Date"),
+                        "label": __("Committed Delivery To Date"),
                         "fieldtype": "Date",
                         "width": "80"
      //                   "default": frappe.datetime.get_today()
                 },
                 {
-                        "fieldname":"warehouse",
-                        "label": __("Warehouse"),
+                        "fieldname":"customer",
+                        "label": __("Customer"),
                         "fieldtype": "Link",
-                        "options": "Warehouse"
+                        "options": "customer"
                 },
                 {
                         "fieldname":"item_code",
@@ -43,12 +44,7 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                         "fieldtype": "Link",
                         "options": "Item"
                 },
-		{
-                        "fieldname":"brand",
-                        "label": __("Brand"),
-                        "fieldtype": "Link",
-                        "options": "Brand"
-                },
+		
 		{
                         "fieldname":"item_group",
                         "label": __("Item Group"),

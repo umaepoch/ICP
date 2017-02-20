@@ -3,7 +3,7 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe import _, msgprint
+from frappe import _, msgprint, utils
 from frappe.utils import flt, getdate, formatdate
 from datetime import datetime, timedelta
 
@@ -32,6 +32,7 @@ def execute(filters=None):
 	item_pend_qty = 0
 	item_del_qty = 0
 	temp_date = getdate("2001-01-01")
+	curr_date = utils.today()
 	diff_days = 0
 	per_qty = 0
 	full_tot_del_amt = 0
@@ -43,7 +44,7 @@ def execute(filters=None):
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
 			item_map[item]["item_group"], item_map[item]["description"], item_map[item]["brand"],                    
-                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total
+                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status
                         
                     ])
 
@@ -60,24 +61,19 @@ def execute(filters=None):
 			tot_pend_qty = tot_si_qty - tot_del_qty
 			
 			if rows[3] == temp_date:
-				diff_days = 0
+				diff_days = getdate(curr_date) - rows[2]
 			else:
 				diff_days = rows[3] - rows[2]
-			msgprint(_(sales_order))
-			msgprint(_(item))
-			msgprint(_(del_note))
-			msgprint(_("Delivery Date"))
-			msgprint(_(rows[3]))
-			msgprint(_("So_del_date"))
-			msgprint(_(rows[2]))
-			msgprint(_("Temporary Date"))
-			msgprint(_(temp_date))
+			
 			if rows[3] <= rows[2] and rows[3] != temp_date:
 				full_tot_del_amt = full_tot_del_amt + rows[16]
 
 				per_qty = (item_del_qty / tot_si_qty) * 100
+
+			if rows[3] == temp_date:
+				rows[3] = " "
 								
-			summ_data.append([rows[13], rows[14], order_prev, rows[1], rows[2],
+			summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[1], rows[2],
 			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
 				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
  				]) 
@@ -87,7 +83,8 @@ def execute(filters=None):
                         item_work = rows[5]
 			
 			if rows[3] == temp_date:
-				diff_days = 0
+				diff_days = getdate(curr_date) - rows[2]
+
 			else:
 				diff_days = rows[3] - rows[2]
 			
@@ -117,13 +114,17 @@ def execute(filters=None):
 					full_tot_del_amt = full_tot_del_amt + rows[16]
 										
 					per_qty = (item_del_qty / rows[9]) * 100
+	
+				if rows[3] == temp_date:
+					rows[3] = " "
 					
-				summ_data.append([rows[13], rows[14], order_prev, rows[1], rows[2],
+					
+				summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[1], rows[2],
 			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
 				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
  				]) 
 			else: 
-				summ_data.append([" ", " ", order_prev, " ", 
+				summ_data.append([" ", " ", " ", order_prev, " ", 
 			 	" ", " ", " ", " ", " ", " ", " ", " ", tot_si_qty, " ", tot_del_qty, tot_pend_qty, per_qty
 				
  				])	
@@ -145,8 +146,11 @@ def execute(filters=None):
 					full_tot_del_amt = full_tot_del_amt + rows[16]
 					
 					per_qty = (item_del_qty / tot_si_qty) * 100
+		
+				if rows[3] == temp_date:
+					rows[3] = " "
 					
-				summ_data.append([rows[13], rows[14], order_work, rows[1], rows[2],
+				summ_data.append([rows[13], rows[14], rows[17], order_work, rows[1], rows[2],
 			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
 				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
  				]) 
@@ -163,11 +167,11 @@ def execute(filters=None):
 	else:
 		tot_per_amt = 0
 
-	summ_data.append([" ", " ", order_prev, " ", 
+	summ_data.append([" ", " ", " ", order_prev, " ", 
 			 	" ", " ", " ", " ", " ", " ", " ", " ", tot_si_qty, " ", tot_del_qty, tot_pend_qty, per_qty
  				])		 
 	
-	summ_data.append([" ", " ", " ", " ", 
+	summ_data.append([" ", " ", " ", " ", " ",
 			 	" ", " ", " ", " ", " ", " ", "Total Value and Percentage ", " ", full_tot_si_amt, " ", full_tot_del_amt, 0, tot_per_amt
  				])
 		 
@@ -182,6 +186,7 @@ def get_columns():
         columns = [
 		_("Customer Group")+"::100",
 		_("SO Assigned To")+"::100",
+		_("SO Status")+"::100",
 		_("SO Sales Order Number")+":Link/Sales Order:150",
 		_("SO Posting Date")+":Date:150",
 		_("SO Committed Delivery Date")+":Date:150",
@@ -217,25 +222,26 @@ def get_conditions(filters):
                 conditions += " and si.item_code = '%s'" % frappe.db.escape(filters.get("item_code"), percent=False)
 	
 	if filters.get("assigned_to"):
-                conditions += " and so.assigned_to = '%s'" % frappe.db.escape(filters.get("assigned_to"), percent=False)
+		pre_ass = '["'
+		suf_ass = '"]'
+		assign_to = pre_ass + filters.get("assigned_to") + suf_ass 
+		conditions += " and so._assign = '%s'" % assign_to
      
         if filters.get("name"):
                 conditions += " and si.parent = '%s'" % frappe.db.escape(filters.get("name"), percent=False)
 
-	if filters.get("brand"):
-                conditions += " and si.brand = '%s'" % frappe.db.escape(filters.get("brand"), percent=False)
-
+	
 	if filters.get("item_group"):
                 conditions += " and si.item_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
 
-        if filters.get("warehouse"):
-                conditions += " and si.warehouse = '%s'" % frappe.db.escape(filters.get("warehouse"), percent=False)
+        if filters.get("customer"):
+                conditions += " and so.customer = '%s'" % frappe.db.escape(filters.get("customer"), percent=False)
         return conditions
 
 def get_sales_details(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select so.name as sales_order, so.assigned_to, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
+        return frappe.db.sql("""select so.name as sales_order, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
                 from `tabDelivery Note Item` dni, `tabDelivery Note` dn, `tabSales Order Item` si, `tabSales Order` so
                 where dni.item_code = si.item_code and so.status != "Cancelled" and dn.status in ("Completed", "To Bill") and so.name = si.parent and dn.name = dni.parent and dni.against_sales_order = so.name %s order by so.name, si.item_code, dn.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
@@ -243,7 +249,7 @@ def get_sales_details_wn_dn(filters):
         conditions = get_conditions(filters)
 
 #	if not (conditions):	
-	return frappe.db.sql("""select so.name as sales_order, so.assigned_to, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
+	return frappe.db.sql("""select so.name as sales_order, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
                 from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent and so.status != "Cancelled" %s and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
 #	else:
@@ -284,7 +290,8 @@ def get_item_map(filters):
 			qty_dict.so_del_date = d.sodel_date
         #        qty_dict.del_date = d.delivery_date
                 qty_dict.customer = d.customer
-		qty_dict.assigned_to = d.assigned_to
+		qty_dict.assigned_to = d._assign
+		qty_dict.status = d.status
 		qty_dict.customer_group = d.customer_group
 		qty_dict.amount = d.amount
 		qty_dict.total = d.total
@@ -310,17 +317,18 @@ def get_item_map(filters):
         	        qty_dict.delivered_qty = d.delivered_qty
         	        qty_dict.so_date = d.date
 			temp_date = getdate("2001-01-01")
-			msgprint(_(d.sales_order))
+			
 			if d.sodel_date == " ":
 				qty_dict.so_del_date = temp_date
-				msgprint(_(qty_dict.so_del_date))
+			
 			else:
 				qty_dict.so_del_date = d.sodel_date
 
 			qty_dict.so_del_date = d.sodel_date
         	#        qty_dict.del_date = d.delivery_date
         	        qty_dict.customer = d.customer
-			qty_dict.assigned_to = d.assigned_to
+			qty_dict.assigned_to = d._assign
+			qty_dict.status = d.status
 			qty_dict.customer_group = d.customer_group
 			qty_dict.amount = d.amount
 			qty_dict.total = d.total
