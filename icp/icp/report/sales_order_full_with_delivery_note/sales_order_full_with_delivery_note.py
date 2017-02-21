@@ -49,6 +49,7 @@ def execute(filters=None):
                     ])
 
 	for rows in data: 
+		
        		if order_count == 0: 
        			order_prev = rows[0] 
  			item_prev = rows[5]
@@ -79,6 +80,7 @@ def execute(filters=None):
 				item_pend_qty, rows[6], rows[3], rows[10]  
  				]) 
                 else: 
+
 						
 			order_work = rows[0]
                         item_work = rows[5]
@@ -119,7 +121,7 @@ def execute(filters=None):
 				if rows[3] == temp_date:
 					rows[3] = " "
 					
-					summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[4], rows[1],
+				summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[4], rows[1],
 			 	rows[5], rows[7], rows[2], rows[9], rows[11], diff_days, per_qty, 
 				item_pend_qty, rows[6], rows[3], rows[10]  
  				]) 
@@ -269,11 +271,11 @@ def get_item_map(filters):
         sle = get_sales_details(filters)
         
 	dle = get_sales_details_wn_dn(filters)
-   
              	
         for d in sle:
                 
                 key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
+
                 if key not in iwb_map:
                         iwb_map[key] = frappe._dict({
                                 "si_qty": 0.0, "del_qty": 0.0,
