@@ -36,8 +36,16 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                         "fieldname":"customer",
                         "label": __("Customer"),
                         "fieldtype": "Link",
-                        "options": "customer"
+                        "options": "Customer"
                 },
+
+		{
+                        "fieldname":"so_status",
+                        "label": __("Status"),
+			"fieldtype": "Data",
+                        "default": "To Deliver"
+                },
+		
                 {
                         "fieldname":"item_code",
                         "label": __("Item"),
@@ -51,6 +59,7 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                         "fieldtype": "Link",
                         "options": "Item Group"
                 },
+		
 		
                                   
                 

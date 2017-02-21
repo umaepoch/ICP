@@ -72,10 +72,11 @@ def execute(filters=None):
 
 			if rows[3] == temp_date:
 				rows[3] = " "
-								
-			summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[1], rows[2],
-			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
-				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
+
+									
+			summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[4], rows[1],
+			 	rows[5], rows[7], rows[2], rows[9], rows[11], diff_days, per_qty, 
+				item_pend_qty, rows[6], rows[3], rows[10]  
  				]) 
                 else: 
 						
@@ -118,14 +119,13 @@ def execute(filters=None):
 				if rows[3] == temp_date:
 					rows[3] = " "
 					
-					
-				summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[1], rows[2],
-			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
-				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
+					summ_data.append([rows[13], rows[14], rows[17], order_prev, rows[4], rows[1],
+			 	rows[5], rows[7], rows[2], rows[9], rows[11], diff_days, per_qty, 
+				item_pend_qty, rows[6], rows[3], rows[10]  
  				]) 
 			else: 
 				summ_data.append([" ", " ", " ", order_prev, " ", 
-			 	" ", " ", " ", " ", " ", " ", " ", " ", tot_si_qty, " ", tot_del_qty, tot_pend_qty, per_qty
+			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " "   
 				
  				])	
 				item_pend_qty = 0
@@ -150,9 +150,9 @@ def execute(filters=None):
 				if rows[3] == temp_date:
 					rows[3] = " "
 					
-				summ_data.append([rows[13], rows[14], rows[17], order_work, rows[1], rows[2],
-			 	rows[3], diff_days, rows[4], rows[5], rows[6], 
-				rows[7], rows[8], rows[9], rows[10], rows[11], item_pend_qty, per_qty
+				summ_data.append([rows[13], rows[14], rows[17], order_work, rows[4], rows[1],
+			 	rows[5], rows[7], rows[2], rows[9], rows[11], diff_days, per_qty, 
+				item_pend_qty, rows[6], rows[3], rows[10] 
  				]) 
                                 
 				
@@ -168,15 +168,18 @@ def execute(filters=None):
 		tot_per_amt = 0
 
 	summ_data.append([" ", " ", " ", order_prev, " ", 
-			 	" ", " ", " ", " ", " ", " ", " ", " ", tot_si_qty, " ", tot_del_qty, tot_pend_qty, per_qty
+			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  				])		 
 	
+	summ_data.append([" ", " ", " ", " ", " ", 
+			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
+ 				])		 
+
 	summ_data.append([" ", " ", " ", " ", " ",
-			 	" ", " ", " ", " ", " ", " ", "Total Value and Percentage ", " ", full_tot_si_amt, " ", full_tot_del_amt, 0, tot_per_amt
+			 	" ", " ", "Total Value and Percentage ", " ", full_tot_si_amt, full_tot_del_amt, 0, tot_per_amt, " ", " ", " "
  				])
 		 
-		 
-						 
+		 						 
 	return columns, summ_data 
 
 
@@ -184,24 +187,25 @@ def get_columns():
         """return columns"""
                
         columns = [
-		_("Customer Group")+"::100",
-		_("SO Assigned To")+"::100",
+		_("Cust Group")+"::100",
+		_("SO Assigned")+"::100",
 		_("SO Status")+"::100",
-		_("SO Sales Order Number")+":Link/Sales Order:150",
-		_("SO Posting Date")+":Date:150",
-		_("SO Committed Delivery Date")+":Date:150",
-		_("DN Actual Delivery Date")+":Date:100",
-		_("Days Actual - Committed")+":Int:100",
-                _("SO Customer")+"::150",
-                _("SO Item")+":Link/Item:100",
+		_("Sales Order")+":Link/Sales Order:150",
+		_("SO Customer")+"::150",
+		_("SO Date")+":Date:150",
+		_("Item")+":Link/Item:100",
+		_("Description")+"::140",
+		_("SO Delivery Date")+":Date:150",
+		_("SO Qty")+":Float:100",
+		_("DN Qty")+":Float:100",
+		_("Days Delay")+":Int:100",
+		_("% On Time Delivery")+":Float:100",
+		_("Bal Qty")+":Float:100",
 		_("Item Group")+"::100",
-	        _("Description")+"::140",
-       	        _("Brand")+":Link/UOM:90",   
-		_("SO Ordered Qty")+":Float:100",    
-               	_("DN Delivery Note")+":Link/Delivery Note:100",
-		_("DN Delivered Qty")+":Float:100",
-		_("DN Balance Qty")+":Float:100",
-		_("% Delivered on time")+":Float:100"   
+		_("DN Date")+":Date:100",             
+       	        _("Delivery Note")+":Link/Delivery Note:100"
+		
+		 
          ]
 
         return columns
@@ -230,6 +234,8 @@ def get_conditions(filters):
         if filters.get("name"):
                 conditions += " and si.parent = '%s'" % frappe.db.escape(filters.get("name"), percent=False)
 
+	if filters.get("so_status"):
+                conditions += " and so.status = '%s'" % frappe.db.escape(filters.get("so_status"), percent=False)
 	
 	if filters.get("item_group"):
                 conditions += " and si.item_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)

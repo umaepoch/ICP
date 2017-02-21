@@ -5,7 +5,7 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
 	"filters": [
 		
 		{
-                        "fieldname":"_assign",
+                        "fieldname":"assigned_to",
                         "label": __("Assigned To"),
                         "fieldtype": "Link",
 			"options": "User",
@@ -36,8 +36,16 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                         "fieldname":"customer",
                         "label": __("Customer"),
                         "fieldtype": "Link",
-                        "options": "customer"
+                        "options": "Customer"
                 },
+
+		{
+                        "fieldname":"so_status",
+                        "label": __("Status"),
+			"fieldtype": "Data",
+                        "default": "Open"
+                },
+		
                 {
                         "fieldname":"item_code",
                         "label": __("Item"),
@@ -51,6 +59,7 @@ frappe.query_reports["Sales Order Full with Delivery Note"] = {
                         "fieldtype": "Link",
                         "options": "Item Group"
                 },
+		
 		
                                   
                 
