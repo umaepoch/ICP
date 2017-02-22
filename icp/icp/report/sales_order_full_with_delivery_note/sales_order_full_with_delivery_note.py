@@ -38,6 +38,14 @@ def execute(filters=None):
 	full_tot_del_amt = 0
 	full_tot_si_amt = 0
 	tot_per_amt = 0
+	tot_del_qty = 0
+	tot_si_qty = 0
+	full_tot_del_qty = 0
+	full_tot_si_qty = 0
+	tot_del_on_time = 0
+	tot_per_qty = 0
+	full_tot_per_qty = 0
+	
 
         for (sales_order, item, delivery_date, del_note) in sorted(iwb_map):
                 qty_dict = iwb_map[(sales_order, item, delivery_date, del_note)]
@@ -56,7 +64,9 @@ def execute(filters=None):
 			tot_si_qty = tot_si_qty + rows[9]
 			
 			full_tot_si_amt = full_tot_si_amt + rows[15]
+			full_tot_si_qty = full_tot_si_qty + rows[9]
                         tot_del_qty = tot_del_qty + rows[11] 
+			
 			item_pend_qty = rows[9] - rows[11] 
 			item_del_qty = rows[11]
 			tot_pend_qty = tot_si_qty - tot_del_qty
@@ -68,7 +78,8 @@ def execute(filters=None):
 			
 			if rows[3] <= rows[2] and rows[3] != temp_date:
 				full_tot_del_amt = full_tot_del_amt + rows[16]
-
+				full_tot_del_qty = full_tot_del_qty + rows[11]
+				tot_del_on_time = tot_del_on_time + rows[11]
 				per_qty = (item_del_qty / tot_si_qty) * 100
 
 			if rows[3] == temp_date:
@@ -107,7 +118,8 @@ def execute(filters=None):
 					item_pend_qty = 0
 					per_qty = 0
 					tot_si_qty = tot_si_qty + rows[9]
-					full_tot_si_amt = full_tot_si_amt + rows[15]	
+					full_tot_si_amt = full_tot_si_amt + rows[15]
+					full_tot_si_qty = full_tot_si_qty + rows[9]	
 					item_pend_qty = rows[9] - item_del_qty	
 				
 				tot_pend_qty = tot_si_qty - tot_del_qty
@@ -115,6 +127,8 @@ def execute(filters=None):
 		#		
 				if rows[3] <= rows[2] and rows[3] != temp_date:
 					full_tot_del_amt = full_tot_del_amt + rows[16]
+					full_tot_del_qty = full_tot_del_qty + rows[11]
+					tot_del_on_time = tot_del_on_time + rows[11]
 										
 					per_qty = (item_del_qty / rows[9]) * 100
 	
@@ -126,18 +140,32 @@ def execute(filters=None):
 				item_pend_qty, rows[6], rows[3], rows[10]  
  				]) 
 			else: 
+				if rows[17] == 'Closed' or rows[17] == 'Completed':
+					if tot_del_qty > 0:
+						tot_per_qty = (tot_del_on_time / tot_del_qty) * 100
+					else:
+						tot_per_qty = 0
+				else:
+					if tot_si_qty > 0:
+						tot_per_qty = (tot_del_on_time / tot_si_qty) * 100
+					else:
+						tot_per_qty = 0
+
 				summ_data.append([" ", " ", " ", order_prev, " ", 
-			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " "   
+			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
 				
  				])	
 				item_pend_qty = 0
 				tot_si_qty = 0
 				tot_del_qty = 0
 				tot_pend_qty = 0
+				tot_del_on_time = 0
 				per_qty = 0
                                 tot_si_qty = tot_si_qty + rows[9]
 				full_tot_si_amt = full_tot_si_amt + rows[15]
+				full_tot_si_qty = full_tot_si_qty + rows[9]
                         	tot_del_qty = tot_del_qty + rows[11] 
+				full_tot_del_qty = full_tot_del_qty + rows[11]
 				tot_pend_qty = tot_si_qty - tot_del_qty
 				item_del_qty = rows[11]		 	 
 				item_pend_qty = rows[9] - rows[11] - item_pend_qty
@@ -146,7 +174,8 @@ def execute(filters=None):
 
 				if rows[3] <= rows[2] and rows[3] != temp_date:
 					full_tot_del_amt = full_tot_del_amt + rows[16]
-					
+					full_tot_del_qty = full_tot_del_qty + rows[11]
+					tot_del_on_time = tot_del_on_time + rows[11]
 					per_qty = (item_del_qty / tot_si_qty) * 100
 		
 				if rows[3] == temp_date:
@@ -166,19 +195,21 @@ def execute(filters=None):
 	if full_tot_si_amt > 0:
 
 		tot_per_amt = (full_tot_del_amt / full_tot_si_amt) * 100
+		tot_per_qty = (full_tot_del_qty / full_tot_si_qty) * 100
 	else:
 		tot_per_amt = 0
+		tot_per_qty = 0
 
 	summ_data.append([" ", " ", " ", order_prev, " ", 
 			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  				])		 
 	
 	summ_data.append([" ", " ", " ", " ", " ", 
-			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
+			 	" ", " ", " ", " ", full_tot_si_qty, full_tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  				])		 
 
 	summ_data.append([" ", " ", " ", " ", " ",
-			 	" ", " ", "Total Value and Percentage ", " ", full_tot_si_amt, full_tot_del_amt, 0, tot_per_amt, " ", " ", " "
+			 	" ", " ", "Total Value and Percentage ", " ", full_tot_si_amt, full_tot_del_amt, 0, tot_per_amt, tot_per_qty, " ", " ", " "
  				])
 		 
 		 						 
