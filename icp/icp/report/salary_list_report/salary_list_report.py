@@ -45,7 +45,7 @@ def get_columns(salary_struc):
 	
 	ssle = frappe.db.sql("""select distinct sd.salary_component, sc.type
 		from `tabSalary Detail` sd, `tabSalary Component` sc, `tabSalary Structure` ss
-		where sc.name=sd.salary_component and sd.amount != 0 and sd.parent = ss.name""", as_dict=1):
+		where sc.name=sd.salary_component and sd.amount != 0 and sd.parent = ss.name""", as_dict=1)
 
 	msgprint(_(ssle))
 	for component in ssle:
