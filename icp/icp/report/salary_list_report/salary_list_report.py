@@ -42,6 +42,9 @@ def get_columns(salary_struc):
 	salary_components = {_("Earning"): [], _("Deduction"): []}
 	msgprint(_("Am I inside"))
 
+	for d in salary_struc:
+		msgprint(_(d))
+
 	for component in frappe.db.sql("""select distinct sd.salary_component, sc.type
 		from `tabSalary Detail` sd, `tabSalary Component` sc
 		where sc.name=sd.salary_component and sd.amount != 0 and sd.parent in (%s)""" %
