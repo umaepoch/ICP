@@ -79,12 +79,15 @@ def get_ss_earning_map(salary_struc):
 
 	ss_earnings = frappe.db.sql("""select sd.parent, sd.salary_component, sd.amount
 		from `tabSalary Detail` sd, `tabSalary Structure` ss where sd.parent = ss.name""", as_dict=1)
-	msgprint(_(ss_earnings))
+	
 	ss_earning_map = {}
 	for d in ss_earnings:
-		msgprint(_(d))
 		ss_earning_map.setdefault(d.parent, frappe._dict()).setdefault(d.salary_component, [])
 		ss_earning_map[d.parent][d.salary_component] = flt(d.amount)
+		msgprint(_(d.parent))
+		msgprint(_(d.salary_component))
+		msgprint(_(d.amount))
+		msgprint(_(ss_earning_map[d.parent][d.salary_component]))
 
 	return ss_earning_map
 
