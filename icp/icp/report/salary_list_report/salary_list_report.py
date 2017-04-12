@@ -40,16 +40,13 @@ def get_columns(salary_struc):
 	]
 
 	salary_components = {_("Earning"): [], _("Deduction"): []}
-	msgprint(_("Am I inside"))
 
 	
 	ssle = frappe.db.sql("""select distinct sd.salary_component, sc.type
 		from `tabSalary Detail` sd, `tabSalary Component` sc, `tabSalary Structure` ss
 		where sc.name=sd.salary_component and sd.amount != 0 and sd.parent = ss.name""", as_dict=1)
 
-	msgprint(_(ssle))
 	for component in ssle:
-		msgprint(_(component))
 		salary_components[_(component.type)].append(component.salary_component)
 
 	columns = columns + [(e + ":Currency:120") for e in salary_components[_("Earning")]] + \
@@ -82,9 +79,10 @@ def get_ss_earning_map(salary_struc):
 
 	ss_earnings = frappe.db.sql("""select sd.parent, sd.salary_component, sd.amount
 		from `tabSalary Detail` sd, `tabSalary Structure` ss where sd.parent = ss.name""", as_dict=1)
-
+	msgprint(_(ss_earnings))
 	ss_earning_map = {}
 	for d in ss_earnings:
+		msgprint(_(d))
 		ss_earning_map.setdefault(d.parent, frappe._dict()).setdefault(d.salary_component, [])
 		ss_earning_map[d.parent][d.salary_component] = flt(d.amount)
 
