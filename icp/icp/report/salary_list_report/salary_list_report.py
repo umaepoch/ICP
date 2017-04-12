@@ -56,7 +56,7 @@ def get_columns(salary_struc):
 def get_salary_struc(filters):
 #	filters.update({"from_date": filters.get("date_range")[0], "to_date":filters.get("date_range")[1]})
 #	conditions, filters = get_conditions(filters)
-	salary_struc = frappe.db.sql("""select  emp.employee as employee, emp.employee_name, emp.date_of_joining, emp.designation, emp.status as status, emp.employment_type, sal.name as sal_struc, sal.total_earning, sal.total_deduction, sal.net_pay from `tabEmployee` emp, `tabSalary Structure` sal where emp.employee = sal.employee and sal.docstatus = 1 
+	salary_struc = frappe.db.sql("""select  emp.employee as employee, emp.employee_name, emp.date_of_joining, emp.designation, emp.status as status, emp.employment_type, sal.name as sal_struc, sal.total_earning, sal.total_deduction, sal.net_pay from `tabEmployee` emp, `tabSalary Structure` sal where emp.employee = sal.employee 
 		order by employee""", as_dict=1)
 
 	if not salary_struc:
