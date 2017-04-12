@@ -40,14 +40,13 @@ def get_columns(salary_struc):
 	]
 
 	salary_components = {_("Earning"): [], _("Deduction"): []}
+	msgprint(_("Am I inside"))
 
 	for component in frappe.db.sql("""select distinct sd.salary_component, sc.type
 		from `tabSalary Detail` sd, `tabSalary Component` sc
 		where sc.name=sd.salary_component and sd.amount != 0 and sd.parent in (%s)""" %
 		(', '.join(['%s']*len(salary_struc))), tuple([d.name for d in salary_struc]), as_dict=1):
-		msgprint(_(component))
-		msgprint(_(component.type))
-		msgprint(_(component.salary_component))
+		
 		salary_components[_(component.type)].append(component.salary_component)
 
 	columns = columns + [(e + ":Currency:120") for e in salary_components[_("Earning")]] + \
