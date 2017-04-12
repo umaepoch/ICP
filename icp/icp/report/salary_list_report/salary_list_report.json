@@ -1,0 +1,27 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2017-04-12 12:51:32.622086", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "", 
+ "modified": "2017-04-12 12:52:17.709051", 
+ "modified_by": "Administrator", 
+ "module": "Icp", 
+ "name": "Salary List Report", 
+ "owner": "Administrator", 
+ "ref_doctype": "Salary Structure", 
+ "report_name": "Salary List Report", 
+ "report_type": "Script Report", 
+ "roles": [
+  {
+   "role": "HR Manager"
+  }, 
+  {
+   "role": "HR User"
+  }
+ ]
+}
