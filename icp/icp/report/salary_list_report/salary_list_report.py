@@ -16,12 +16,11 @@ def execute(filters=None):
 
 	data = []
 	for ss in salary_struc:
-		row = [ss.employee, ss.employee_name, ss.date_of_joining, ss.designation,
+		row = [ss.name, ss.employee, ss.employee_name, ss.date_of_joining, ss.designation,
 			ss.status, ss.employment_type, ss.sal_struc]
 
 		for e in earning_types:
 			row.append(ss_earning_map.get(ss.name, {}).get(e))
-
 		row += [ss.gross_pay]
 
 		for d in ded_types:
@@ -35,7 +34,7 @@ def execute(filters=None):
 
 def get_columns(salary_struc):
 	columns = [
-		_("Employee") + ":Link/Employee:120", _("Employee Name") + "::140", _("Date of Joining") + "::140",  _("Designation") + ":Link/Designation:120",  _("Status") + "::120",  _("Employment Type") + "::120",  _("Salary Structure") + ":Link/Salary Structure:120",
+		_("Salary Structure") + ":Link/Salary Structure:120", _("Employee") + ":Link/Employee:120", _("Employee Name") + "::140", _("Date of Joining") + "::140",  _("Designation") + ":Link/Designation:120",  _("Status") + "::120",  _("Employment Type") + "::120",  _("Salary Structure") + ":Link/Salary Structure:120",
 		
 	]
 
@@ -58,7 +57,7 @@ def get_columns(salary_struc):
 def get_salary_struc(filters):
 #	filters.update({"from_date": filters.get("date_range")[0], "to_date":filters.get("date_range")[1]})
 #	conditions, filters = get_conditions(filters)
-	salary_struc = frappe.db.sql("""select  emp.employee as employee, emp.employee_name, emp.date_of_joining, emp.designation, emp.status as status, emp.employment_type, sal.name as sal_struc, sal.total_earning, sal.total_deduction, sal.net_pay from `tabEmployee` emp, `tabSalary Structure` sal where emp.employee = sal.employee 
+	salary_struc = frappe.db.sql("""select sal.name, emp.employee as employee, emp.employee_name, emp.date_of_joining, emp.designation, emp.status as status, emp.employment_type, sal.name as sal_struc, sal.total_earning, sal.total_deduction, sal.net_pay from `tabEmployee` emp, `tabSalary Structure` sal where emp.employee = sal.employee 
 		order by employee""", as_dict=1)
 
 	if not salary_struc:
@@ -84,10 +83,6 @@ def get_ss_earning_map(salary_struc):
 	for d in ss_earnings:
 		ss_earning_map.setdefault(d.parent, frappe._dict()).setdefault(d.salary_component, [])
 		ss_earning_map[d.parent][d.salary_component] = flt(d.amount)
-		msgprint(_(d.parent))
-		msgprint(_(d.salary_component))
-		msgprint(_(d.amount))
-		msgprint(_(ss_earning_map[d.parent][d.salary_component]))
 
 	return ss_earning_map
 
