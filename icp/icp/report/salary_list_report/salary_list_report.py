@@ -79,9 +79,9 @@ def get_salary_struc(filters):
 #	return conditions, filters
 
 def get_ss_earning_map(salary_struc):
-	ss_earnings = frappe.db.sql("""select parent, salary_component, amount
-		from `tabSalary Detail` where parent in (%s)""" %
-		(', '.join(['%s']*len(salary_struc))), tuple([d.name for d in salary_struc]), as_dict=1)
+
+	ss_earnings = frappe.db.sql("""select sd.parent, sd.salary_component, sd.amount
+		from `tabSalary Detail` sd, `tabSalary Structure` ss where sd.parent = ss.name""" %, as_dict=1)
 
 	ss_earning_map = {}
 	for d in ss_earnings:
@@ -91,9 +91,8 @@ def get_ss_earning_map(salary_struc):
 	return ss_earning_map
 
 def get_ss_ded_map(salary_struc):
-	ss_deductions = frappe.db.sql("""select parent, salary_component, amount
-		from `tabSalary Detail` where parent in (%s)""" %
-		(', '.join(['%s']*len(salary_struc))), tuple([d.name for d in salary_struc]), as_dict=1)
+	ss_deductions = frappe.db.sql("""select sd.parent, sd.salary_component, sd.amount
+		from `tabSalary Detail` sd, `tabSalary Structure` ss where sd.parent = ss.name""" %, as_dict=1)
 
 	ss_ded_map = {}
 	for d in ss_deductions:
