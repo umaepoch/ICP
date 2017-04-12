@@ -18,9 +18,12 @@ def execute(filters=None):
 	for ss in salary_struc:
 		row = [ss.employee, ss.employee_name, ss.date_of_joining, ss.designation,
 			ss.status, ss.employment_type, ss.sal_struc]
-
+		msgprint(_(earning_types))
 		for e in earning_types:
+			msgprint(_(e))
+			msgprint(_(ss.name))
 			row.append(ss_earning_map.get(ss.name, {}).get(e))
+			msgprint(_(row))
 
 		row += [ss.gross_pay]
 
@@ -84,10 +87,7 @@ def get_ss_earning_map(salary_struc):
 	for d in ss_earnings:
 		ss_earning_map.setdefault(d.parent, frappe._dict()).setdefault(d.salary_component, [])
 		ss_earning_map[d.parent][d.salary_component] = flt(d.amount)
-		msgprint(_(d.parent))
-		msgprint(_(d.salary_component))
-		msgprint(_(d.amount))
-		msgprint(_(ss_earning_map[d.parent][d.salary_component]))
+		
 
 	return ss_earning_map
 
