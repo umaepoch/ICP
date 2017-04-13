@@ -132,7 +132,7 @@ def get_conditions(filters):
                 conditions += " and so.transaction_date >= '%s'" % frappe.db.escape(filters["from_date"])
 		
 	if filters.get("to_date"):
-                conditions += " and so.transaction_date >= '%s'" % frappe.db.escape(filters["to_date"])
+                conditions += " and so.transaction_date <= '%s'" % frappe.db.escape(filters["to_date"])
 
 
 #       if filters.get("warehouse"):
@@ -176,10 +176,8 @@ def get_item_warehouse_map(filters):
         to_date = getdate(filters["to_date"])
 
         sle = get_sales_order_entries(filters)
-	msgprint(_(sle))
-#	dle = get_sales_order_entries_2(filters)
-	dle = []
-	msgprint(_(dle))
+	dle = get_sales_order_entries_2(filters)
+#	dle = []
 	company = filters.get("company")
 	total_stock = 0
 	if filters.get("warehouse"):
