@@ -175,7 +175,9 @@ def get_item_warehouse_map(filters):
         to_date = getdate(filters["to_date"])
 
         sle = get_sales_order_entries(filters)
+	msgprint(_(sle))
 	dle = get_sales_order_entries_2(filters)
+	msgprint(_(dle))
 	company = filters.get("company")
 	total_stock = 0
 	if filters.get("warehouse"):
