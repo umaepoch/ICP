@@ -128,6 +128,11 @@ def get_conditions(filters):
                 conditions += " and bi.parent = '%s'" % frappe.db.escape(filters.get("bom"), percent=False)
 	if filters.get("sales_order"):
                 conditions += " and si.parent = '%s'" % frappe.db.escape(filters.get("sales_order"), percent=False)
+	if filters.get("from_date"):
+                conditions += " and so.transaction_date >= '%s'" % frappe.db.escape(filters.get("from_date"), percent=False)
+	if filters.get("to_date"):
+                conditions += " and so.transaction_date >= '%s'" % frappe.db.escape(filters.get("to_date"), percent=False)
+
 
 #       if filters.get("warehouse"):
   #             conditions += " and warehouse = '%s'" % frappe.db.escape(filters.get("warehouse"), percent=False)
