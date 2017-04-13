@@ -119,7 +119,7 @@ def get_conditions(filters):
         conditions = ""
 	
 	if filters.get("company"):
-                conditions += " and bo.company = '%s'" % frappe.db.escape(filters.get("company"), percent=False)
+                conditions += " and so.company = '%s'" % frappe.db.escape(filters.get("company"), percent=False)
 
         if filters.get("item_code"):
                 conditions += " and item_code = '%s'" % frappe.db.escape(filters.get("item_code"), percent=False)
@@ -160,13 +160,13 @@ def get_sales_order_entries_2(filters):
 
 	if filters.get("include_exploded_items") == "Y":
 	        
-        	return frappe.db.sql("""select so.name as sales_order, si.item_code as item_code, si.qty as si_qty, si.delivered_qty, " " as name, " " as company, " " as bi_item, 0 as qty
+        	return frappe.db.sql("""select so.name as sales_order, si.item_code as item_code, si.qty as si_qty, si.delivered_qty, " " as name, " " as company, " " as bi_item, 0 as bi_qty
                 	from `tabSales Order` so, `tabSales Order Item` si where so.name = si.parent and so.status != "Cancelled" and si.delivered_qty < si.qty %s and not exists ( select 1 from `tabBOM` bo where bo.item = si.item_code 
                 	order by so.name, si.item_code)""" % conditions, as_dict=1)
 
 	else:
 
-        	return frappe.db.sql("""select so.name as sales_order, si.item_code as item_code, si.qty as si_qty, si.delivered_qty, " " as name, " " as company, " " as bi_item, 0 as qty
+        	return frappe.db.sql("""select so.name as sales_order, si.item_code as item_code, si.qty as si_qty, si.delivered_qty, " " as name, " " as company, " " as bi_item, 0 as bi_qty
                 	from `tabSales Order` so, `tabSales Order Item` si where so.name = si.parent and so.status != "Cancelled" and si.delivered_qty < si.qty %s and not exists ( select 1 from `tabBOM` bo where bo.item = si.item_code 
                 	order by so.name, si.item_code)""" % conditions, as_dict=1)
 
@@ -264,7 +264,7 @@ def get_item_warehouse_map(filters):
 				qty_dict.bi_item = d.bi_item
 	
 	if dle:
-		for d in sle:
+		for d in dle:
 			if filters.get("warehouse"):
 				key = (d.sales_order, d.name, d.item_code, whse)
 					
