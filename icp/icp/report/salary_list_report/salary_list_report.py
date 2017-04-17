@@ -95,4 +95,4 @@ def get_ss_ded_map(salary_struc):
 		ss_ded_map.setdefault(d.parent, frappe._dict()).setdefault(d.salary_component, [])
 		ss_ded_map[d.parent][d.salary_component] = flt(d.amount)
 
-return ss_ded_map
+	return ss_ded_map
