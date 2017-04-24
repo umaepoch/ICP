@@ -16,12 +16,8 @@ def get_leave_balance_on(employee, leave_type, date, allocation_records=None,
 	if consider_all_leaves_in_the_allocation_period:
 		date = allocation.to_date
 	leaves_taken = get_approved_leaves_for_period(employee, leave_type, allocation.from_date, date)
-	leave_balance = flt(allocation.total_leaves_allocated) - flt(leaves_taken)
-	msgprint(_(leaves_taken))
-	msgprint(_(leave_balance))
-	leaves_txt = "(" + str(leaves_taken) + "," + str(leave_balance) + ")"
-	msgprint(_(leaves_txt))
-	return leaves_txt
+		
+	return flt(allocation.total_leaves_allocated) - flt(leaves_taken)
 
 
 def get_leave_allocation_records(date, employee=None):
@@ -41,6 +37,7 @@ def get_leave_allocation_records(date, employee=None):
 
 	return allocated_leaves
 
+@frappe.whitelist()
 def get_approved_leaves_for_period(employee, leave_type, from_date, to_date):
 
 	leave_applications = frappe.db.sql("""
