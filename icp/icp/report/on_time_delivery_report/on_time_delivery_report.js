@@ -44,7 +44,7 @@ frappe.query_reports["On Time Delivery Report"] = {
                         "fieldname":"so_status",
                         "label": __("Status"),
 			"fieldtype": "Data",
-                        "default": "To Deliver"
+
                 },
 		
                 {

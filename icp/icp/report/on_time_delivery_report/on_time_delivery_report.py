@@ -278,21 +278,31 @@ def get_conditions(filters):
 
 	return conditions
 
-def get_sales_details(filters):
+def get_sales_details_w_dn(filters):
         conditions = get_conditions(filters)
 	
         return frappe.db.sql("""select so.name as sales_order, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
                 from `tabDelivery Note Item` dni, `tabDelivery Note` dn, `tabSales Order Item` si, `tabSales Order` so
                 where dni.item_code = si.item_code and so.status != "Cancelled" and so.status != "Draft" and so.status != "Closed" and dn.status in ("Completed", "To Bill") and so.name = si.parent and dn.name = dni.parent and dni.against_sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" %s order by so.name, si.item_code, dn.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
+def get_sales_details_w_inv(filters):
+        conditions = get_conditions(filters)
+	
+        return frappe.db.sql("""select so.name as sales_order, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
+                from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
+                where sli.item_code = si.item_code and so.status != "Cancelled" and so.status != "Draft" and so.status != "Closed" and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 %s and not exists (
+                select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
-def get_sales_details_wn_dn(filters):
+
+
+def get_sales_details_wo_dn_inv(filters):
         conditions = get_conditions(filters)
 
 #	if not (conditions):	
 	return frappe.db.sql("""select so.name as sales_order, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
                 from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent and so.status != "Cancelled" and so.status != "Draft" %s and so.status != "Closed" and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
-                select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
+                select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) and not exists (
+                select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
 #	else:
 #		return
 
@@ -301,9 +311,11 @@ def get_item_map(filters):
 #        from_date = getdate(filters["from_date"])
  #       to_date = getdate(filters["to_date"])
 	
-        sle = get_sales_details(filters)
+        sle = get_sales_details_w_dn(filters)
         
-	dle = get_sales_details_wn_dn(filters)
+	dle = get_sales_details_w_inv(filters)
+
+	kle = get_sales_details_wo_dn_inv(filters)
              	
         for d in sle:
                 
@@ -340,6 +352,44 @@ def get_item_map(filters):
               		qty_dict.pend_qty = qty_dict.si_qty - qty_dict.del_qty - qty_dict.delivered_qty
 	if dle:
 		for d in dle:
+
+        	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
+        	        if key not in iwb_map:
+        	                iwb_map[key] = frappe._dict({
+        	                        "si_qty": 0.0, "del_qty": 0.0,
+					"pend_qty": 0.0, "amount": 0.0,
+					"total": 0.0,
+        	                        "val_rate": 0.0, "uom": None
+        	                })
+
+        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
+
+                
+        	        qty_dict.si_qty = d.si_qty
+        	        qty_dict.del_qty = d.del_qty
+        	        qty_dict.delivered_qty = d.delivered_qty
+        	        qty_dict.so_date = d.date
+			temp_date = getdate("2001-01-01")
+			
+			if d.sodel_date == " ":
+				qty_dict.so_del_date = temp_date
+			
+			else:
+				qty_dict.so_del_date = d.sodel_date
+
+			qty_dict.so_del_date = d.sodel_date
+        	#        qty_dict.del_date = d.delivery_date
+        	        qty_dict.customer = d.customer
+			qty_dict.assigned_to = d._assign
+			qty_dict.status = d.status
+			qty_dict.customer_group = d.customer_group
+			qty_dict.amount = d.amount
+			qty_dict.total = d.total
+        	        if qty_dict.si_qty > qty_dict.del_qty:
+        	      		qty_dict.pend_qty = qty_dict.si_qty - qty_dict.del_qty - qty_dict.delivered_qty
+	
+	if kle:
+		for d in kle:
 
         	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
         	        if key not in iwb_map:
