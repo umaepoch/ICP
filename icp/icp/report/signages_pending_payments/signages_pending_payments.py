@@ -31,7 +31,7 @@ def execute(filters=None):
        		if 'Petroleum' in rows[1]:
 			diff_data = 1
 		else:
-			if 'Indian Oil' in rows[2]:
+			if 'Indian Oil' in rows[1]:
 				diff_data = 1
 			else:
 				diff_data = 0
