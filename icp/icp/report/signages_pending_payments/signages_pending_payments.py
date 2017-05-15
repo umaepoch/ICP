@@ -23,11 +23,6 @@ def execute(filters=None):
                 qty_dict = iwb_map[(sales_invoice)]
 
 
-		qty_dict.delivery_at = d.delivery_at
-		qty_dict.out_amt = d.outstanding_amount
-		qty_dict.due_date = d.due_date
-		qty_dict.submitted_to_customer = d.submitted_to_customer
-		qty_dict.payment_follow = d.payment_followup_notes
                 data.append([
                         sales_invoice, qty_dict.customer, qty_dict.posting_date, qty_dict.buyers_order_ref, qty_dict.delivery_at, qty_dict.out_amt, qty_dict.due_date, qty_dict.submitted_to_customer, qty_dict.payment_follow
                         
