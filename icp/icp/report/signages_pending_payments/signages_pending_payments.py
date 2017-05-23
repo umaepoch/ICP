@@ -23,7 +23,7 @@ def execute(filters=None):
                 qty_dict = iwb_map[(sales_invoice)]
 
 
-                data.append([sales_invoice, qty_dict.customer, qty_dict.customer_group, qty_dict.posting_date, qty_dict.buyers_order_ref, qty_dict.delivery_at, qty_dict.out_amt, qty_dict.due_date, qty_dict.submitted_to_customer, qty_dict.payment_follow])
+                data.append([sales_invoice, qty_dict.customer, qty_dict.cust_group, qty_dict.posting_date, qty_dict.buyers_order_ref, qty_dict.delivery_at, qty_dict.out_amt, qty_dict.due_date, qty_dict.submitted_to_customer, qty_dict.payment_follow])
 
 	for rows in data: 
 		diff_data = 0
