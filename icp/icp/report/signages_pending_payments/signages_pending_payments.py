@@ -29,10 +29,10 @@ def execute(filters=None):
 		diff_data = 0
 		msgprint(_(rows[0]))
 		msgprint(_(rows[1]))
-       		if 'Petroleum' in rows[1]:
+       		if 'Petroleum' in rows[1] or 'PETROLEUM' in rows[1]:
 			diff_data = 1
 		else:
-			if 'Indian Oil' in rows[1]:
+			if 'Indian' in rows[1]:
 				diff_data = 1
 			else:
 				diff_data = 0
