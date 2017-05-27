@@ -87,7 +87,7 @@ def get_sales_details(filters):
 	
         return frappe.db.sql("""select inv.name as sales_invoice, inv.customer, inv.customer_group, inv.posting_date, inv.buyers_order_ref, inv.delivery_at, inv.outstanding_amount, inv.due_date, inv.submitted_to_customer, inv.payment_followup_notes
                 from `tabSales Invoice` inv
-		where (inv.customer_group = "Signage" or inv.customer_group = "Commercial") and inv.outstanding_amount > 0 %s
+		where (inv.customer_group = "Signage" or inv.customer_group = "Commercial" or inv.customer_group = "Government") and inv.outstanding_amount > 0 %s
 		order by inv.name, inv.customer, inv.posting_date""" % conditions, as_dict=1)
 
 
