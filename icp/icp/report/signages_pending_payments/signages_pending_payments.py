@@ -27,8 +27,7 @@ def execute(filters=None):
 
 	for rows in data: 
 		diff_data = 0
-		msgprint(_(rows[0]))
-		msgprint(_(rows[1]))
+		
        		if 'Petroleum' in rows[1] or 'PETROLEUM' in rows[1]:
 			diff_data = 1
 		else:
@@ -36,7 +35,7 @@ def execute(filters=None):
 				diff_data = 1
 			else:
 				diff_data = 0
-		msgprint(_(diff_data))
+		
 		if diff_data == 1:		
 								
 			summ_data.append([rows[0], rows[1], rows[2],
