@@ -27,6 +27,7 @@ def execute(filters=None):
 
 	for rows in data: 
 		diff_data = 0
+		msgprint(_(rows[0]))
 		msgprint(_(rows[1]))
        		if 'Petroleum' in rows[1]:
 			diff_data = 1
@@ -110,7 +111,6 @@ def get_item_map(filters):
                 qty_dict = iwb_map[(d.sales_invoice)]
 
                 qty_dict.sales_invoice = d.sales_invoice
-                msgprint(_(qty_dict.sales_invoice))
 
 		qty_dict.customer = d.customer
 		qty_dict.cust_group = d.customer_group
