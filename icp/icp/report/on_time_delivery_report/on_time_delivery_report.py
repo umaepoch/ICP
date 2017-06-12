@@ -151,10 +151,10 @@ def execute(filters=None):
 					else:
 						tot_per_qty = 0
 
-				summ_data.append([" ", " ", " ", order_prev, " ", 
-			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
-				
- 				])	
+				#summ_data.append([" ", " ", " ", order_prev, " ", 
+#			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
+#				
+ #				])	
 				item_pend_qty = 0
 				tot_si_qty = 0
 				tot_del_qty = 0
@@ -200,9 +200,9 @@ def execute(filters=None):
 		tot_per_amt = 0
 		tot_per_qty = 0
 
-	summ_data.append([" ", " ", " ", order_prev, " ", 
-			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
- 				])		 
+#	summ_data.append([" ", " ", " ", order_prev, " ", 
+#			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
+ #				])		 
 	
 	summ_data.append([" ", " ", " ", " ", " ", 
 			 	" ", " ", " ", " ", full_tot_si_qty, full_tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
