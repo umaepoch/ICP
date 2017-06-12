@@ -1,0 +1,37 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2017-05-08 13:20:47.131674", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 3, 
+ "is_standard": "Yes", 
+ "letter_head": "Standard", 
+ "modified": "2017-05-21 14:06:47.350258", 
+ "modified_by": "Administrator", 
+ "module": "Icp", 
+ "name": "Open Compliance Issues", 
+ "owner": "Administrator", 
+ "query": "SELECT\n\tname as \"Issue:Link/Issue:100\",\n\traised_on \"Raised on:Date:100\", \n\tsubject \"Subject::350\",\n\tstatus \"Status::100\" \nFROM\n\t`tabIssue`\nWHERE\n\tstatus in (\"Open\") and \n\tbusiness_line in (\"Compliance\")\n\t", 
+ "ref_doctype": "Issue", 
+ "report_name": "Open Compliance Issues", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Support Manager"
+  }, 
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Read all"
+  }, 
+  {
+   "role": "Customer"
+  }, 
+  {
+   "role": "Support Team"
+  }
+ ]
+}
