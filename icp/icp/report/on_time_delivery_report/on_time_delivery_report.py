@@ -361,9 +361,10 @@ def get_item_map(filters):
 		qty_dict.amount = d.amount
 		qty_dict.billed_amt = d.billed_amt
 		qty_dict.total = d.total
+		qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
                 if qty_dict.si_qty > qty_dict.del_qty:
               		qty_dict.pend_qty = qty_dict.si_qty - qty_dict.del_qty - qty_dict.delivered_qty
-			qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
+			
 	if dle:
 		for d in dle:
 
@@ -401,9 +402,10 @@ def get_item_map(filters):
 			qty_dict.amount = d.amount
 			qty_dict.billed_amt = d.billed_amt
 			qty_dict.total = d.total
+			qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
 	                if qty_dict.si_qty > qty_dict.del_qty:
         	      		qty_dict.pend_qty = qty_dict.si_qty - qty_dict.del_qty - qty_dict.delivered_qty
-				qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
+				
 	
 	if kle:
 		for d in kle:
@@ -442,9 +444,10 @@ def get_item_map(filters):
 			qty_dict.amount = d.amount
 			qty_dict.billed_amt = d.billed_amt
 			qty_dict.total = d.total
+			qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
 	                if qty_dict.si_qty > qty_dict.del_qty:
         	      		qty_dict.pend_qty = qty_dict.si_qty - qty_dict.del_qty - qty_dict.delivered_qty
-				qty_dict.pend_val = qty_dict.amount - qty_dict.billed_amt
+				
 	
 	
 
