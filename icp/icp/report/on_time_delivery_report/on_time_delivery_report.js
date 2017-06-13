@@ -43,9 +43,21 @@ frappe.query_reports["On Time Delivery Report"] = {
 		{
                         "fieldname":"so_status",
                         "label": __("Status"),
-			"fieldtype": "Data",
+			"fieldtype": "Select",
+			"options": [
+				{ "value": "Completed", "label": __("Completed") },
+				{ "value": "To Deliver", "label": __("To Deliver") },
+				{ "value": "To Deliver and Bill", "label": __("To Deliver and Bill") },
+				{ "value": "To Bill", "label": __("To Bill") },
+				{ "value": "Closed", "label": __("Closed") },
+
+				
+			],
+
+					
 
                 },
+
 		
                 {
                         "fieldname":"item_code",
