@@ -50,14 +50,31 @@ frappe.query_reports["On Time Delivery Report"] = {
 				{ "value": "To Deliver and Bill", "label": __("To Deliver and Bill") },
 				{ "value": "To Bill", "label": __("To Bill") },
 				{ "value": "Closed", "label": __("Closed") },
-
+				{ "value": "Draft", "label": __("Draft") },
+				{ "value": "Cancelled", "label": __("Cancelled") },
 				
 			],
+			"default": "To Deliver and Bill"
 
 					
 
                 },
 
+		{
+                        "fieldname":"doc_status",
+                        "label": __("Doc Status"),
+			"fieldtype": "Select",
+			"options": [
+				{ "value": "0", "label": __("Draft") },
+				{ "value": "1", "label": __("Submitted") },
+				{ "value": "2", "label": __("Cancelled") },
+								
+			],
+			"default": "1"
+
+					
+
+                },
 		
                 {
                         "fieldname":"item_code",

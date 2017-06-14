@@ -280,6 +280,9 @@ def get_conditions(filters):
 
 	if filters.get("so_status"):
                 conditions += " and so.status = '%s'" % frappe.db.escape(filters.get("so_status"), percent=False)
+
+	if filters.get("doc_status"):
+                conditions += " and so.docstatus = '%s'" % frappe.db.escape(filters.get("doc_status"), percent=False)
 	
 	if filters.get("item_group"):
                 conditions += " and si.item_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
@@ -294,14 +297,14 @@ def get_sales_details_w_dn(filters):
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
                 from `tabDelivery Note Item` dni, `tabDelivery Note` dn, `tabSales Order Item` si, `tabSales Order` so
-                where dni.item_code = si.item_code and so.status != "Cancelled" and so.status != "Draft" and dn.status in ("Completed", "To Bill") and so.name = si.parent and dn.name = dni.parent and dni.against_sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" %s order by so.name, si.item_code, dn.posting_date asc, si.warehouse""" % conditions, as_dict=1)
+                where dni.item_code = si.item_code and dn.status in ("Completed", "To Bill") and so.name = si.parent and dn.name = dni.parent and dni.against_sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" %s order by so.name, si.item_code, dn.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 def get_sales_details_w_inv(filters):
         conditions = get_conditions(filters)
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where sli.item_code = si.item_code and so.status != "Cancelled" and so.status != "Draft" and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 %s and not exists (
+                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 %s and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 
@@ -311,7 +314,7 @@ def get_sales_details_wo_dn_inv(filters):
 
 #	if not (conditions):	
 	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
-                from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent and so.status != "Cancelled" and so.status != "Draft" %s and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
+                from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent %s and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) and not exists (
                 select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
 #	else:
