@@ -91,7 +91,7 @@ def execute(filters=None):
 									
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
-				 rows[11], per_qty, rows[13], rows[14], rows[17], rows[6], rows[10], rows[3]
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3]
  				]) 
                 else: 
 
@@ -143,7 +143,7 @@ def execute(filters=None):
 					
 				summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
-				 rows[11], per_qty, rows[13], rows[14], rows[17], rows[6], rows[10], rows[3] 
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
 			else: 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
@@ -191,7 +191,7 @@ def execute(filters=None):
 					
 				summ_data.append([order_work, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
-				 rows[11], per_qty, rows[13], rows[14], rows[17], rows[6], rows[10], rows[3] 
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
                                 
 				
