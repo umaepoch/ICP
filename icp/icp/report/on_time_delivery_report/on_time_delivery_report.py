@@ -52,7 +52,7 @@ def execute(filters=None):
 	
 
         for (sales_order, item, si_idx, delivery_date, del_note) in sorted(iwb_map):
-                qty_dict = iwb_map[(sales_order, item, delivery_date, del_note)]
+                qty_dict = iwb_map[(sales_order, item, si_idx, delivery_date, del_note)]
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
 			item_map[item]["item_group"], item_map[item]["description"], item_map[item]["brand"],                    
