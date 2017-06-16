@@ -22,9 +22,7 @@ def execute(filters=None):
         order_prev = "" 
         order_work = "" 
         item_prev = ""
-	idx_prev = ""
         item_work = ""
-	idx_work = ""
         order_count = 0 
 	item_count = 0
         tot_bal_qty = 0 
@@ -51,12 +49,12 @@ def execute(filters=None):
 	full_tot_per_qty = 0
 	
 
-        for (sales_order, item, si_idx, delivery_date, del_note) in sorted(iwb_map):
-                qty_dict = iwb_map[(sales_order, item, si_idx, delivery_date, del_note)]
+        for (sales_order, item, delivery_date, del_note) in sorted(iwb_map):
+                qty_dict = iwb_map[(sales_order, item, delivery_date, del_note)]
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
 			item_map[item]["item_group"], item_map[item]["description"], item_map[item]["brand"],                    
-                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, si_idx
+                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val
                         
                     ])
 
@@ -65,7 +63,6 @@ def execute(filters=None):
        		if order_count == 0: 
        			order_prev = rows[0] 
  			item_prev = rows[5]
-			idx_prev = rows[20]
 			tot_si_qty = tot_si_qty + rows[9]
 			
 			full_tot_si_amt = full_tot_si_amt + rows[15]
@@ -101,7 +98,6 @@ def execute(filters=None):
 						
 			order_work = rows[0]
                         item_work = rows[5]
-			idx_work = rows[20]
 			if rows[3] == temp_date:
 				diff_days = getdate(curr_date) - rows[2]
 
@@ -114,14 +110,13 @@ def execute(filters=None):
 				item_del_qty = item_del_qty + rows[11]
 								
 							
-                                if item_prev == item_work and idx_prev == idx_work:
+                                if item_prev == item_work:
 		
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
 								
 				else:
 					item_prev = item_work
-					idx_prev = idx_work
 					item_del_qty = rows[11]
 					item_pend_qty = 0
 					item_pend_val = 0
@@ -201,7 +196,6 @@ def execute(filters=None):
 				
 				order_prev = order_work 
                                 item_prev = item_work
-				idx_prev = idx_work
 
 									
 		order_count = order_count + 1 
@@ -338,7 +332,7 @@ def get_item_map(filters):
              	
         for d in sle:
                 
-                key = (d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)
+                key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
 
                 if key not in iwb_map:
                         iwb_map[key] = frappe._dict({
@@ -348,7 +342,7 @@ def get_item_map(filters):
                                 "val_rate": 0.0, "uom": None
                         })
 
-                qty_dict = iwb_map[(d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)]
+                qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
 
                 
                 qty_dict.si_qty = d.si_qty
@@ -376,7 +370,7 @@ def get_item_map(filters):
 	if dle:
 		for d in dle:
 
-        	        key = (d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)
+        	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
         	        if key not in iwb_map:
         	                iwb_map[key] = frappe._dict({
         	                        "si_qty": 0.0, "del_qty": 0.0,
@@ -385,7 +379,7 @@ def get_item_map(filters):
         	                        "val_rate": 0.0, "uom": None
         	                })
 
-        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)]
+        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
 
                 
         	        qty_dict.si_qty = d.si_qty
@@ -418,7 +412,7 @@ def get_item_map(filters):
 	if kle:
 		for d in kle:
 
-        	        key = (d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)
+        	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
         	        if key not in iwb_map:
         	                iwb_map[key] = frappe._dict({
         	                        "si_qty": 0.0, "del_qty": 0.0,
@@ -427,7 +421,7 @@ def get_item_map(filters):
         	                        "val_rate": 0.0, "uom": None
         	                })
 
-        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.si_idx, d.delivery_date, d.del_note)]
+        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
 
                 
         	        qty_dict.si_qty = d.si_qty
