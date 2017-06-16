@@ -304,7 +304,7 @@ def get_sales_details_w_inv(filters):
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 %s and not exists (
+                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 
