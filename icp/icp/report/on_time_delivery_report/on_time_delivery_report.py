@@ -117,8 +117,8 @@ def execute(filters=None):
 					item_pend_val = rows[19]
 								
 				else:
-					summ_data.append([order_prev, item_prev, " ", " ",
-			 	rows[5], " ", " ", item_pend_qty, item_pend_val, diff_days, rows[9],
+					summ_data.append([order_prev, " ", " ", " ",
+			 	item_prev, " ", " ", item_pend_qty, item_pend_val, diff_days, rows[9],
 				 rows[11], per_qty, " ", " ", " ", " "," ", " " 
  				]) 
 					item_prev = item_work
