@@ -91,7 +91,7 @@ def execute(filters=None):
 									
 						
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " ", " ", diff_days, rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3]
  				]) 
                 else: 
@@ -117,9 +117,9 @@ def execute(filters=None):
 					item_pend_val = rows[19]
 								
 				else:
-					summ_data.append([order_prev, item_prev, rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
-				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17]," ", " " 
+					summ_data.append([order_prev, item_prev, " ", " ",
+			 	rows[5], " ", " ", item_pend_qty, item_pend_val, diff_days, rows[9],
+				 rows[11], per_qty, " ", " ", " ", " "," ", " " 
  				]) 
 					item_prev = item_work
 					item_del_qty = rows[11]
@@ -146,7 +146,7 @@ def execute(filters=None):
 					rows[3] = " "
 					
 				summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], item_pend_qty, item_pend_val, diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " ", " ", diff_days, rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
 			else: 
