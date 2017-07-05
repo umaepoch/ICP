@@ -15,6 +15,7 @@ def execute(filters=None):
         columns = get_columns()
        
         item_map = get_item_details(filters)
+	msgprint(_(item_map))
         iwb_map = get_item_map(filters)
 
         data = []
