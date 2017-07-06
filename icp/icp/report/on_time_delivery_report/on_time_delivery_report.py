@@ -150,6 +150,9 @@ def execute(filters=None):
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
 			else: 
+				summ_data.append([order_prev, " ", " ", " ",
+			 	item_prev, " ", " ", item_pend_qty, item_pend_val, diff_days, " ", " ", per_qty, " ", " ", " ", " "," ", " " 
+ 				]) 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
 						tot_per_qty = (tot_del_on_time / tot_del_qty) * 100
