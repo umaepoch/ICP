@@ -15,7 +15,7 @@ def execute(filters=None):
         columns = get_columns()
        
         item_map = get_item_details(filters)
-	msgprint(_(item_map))
+
         iwb_map = get_item_map(filters)
 
         data = []
@@ -200,7 +200,7 @@ def execute(filters=None):
 					rows[3] = " "
 					
 				summ_data.append([order_work, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], " ", " ", diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " "," ", diff_days, rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
                                 
