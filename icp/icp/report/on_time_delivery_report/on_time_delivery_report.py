@@ -69,7 +69,10 @@ def execute(filters=None):
 			sodate_prev = rows[1]
 			desc_prev = rows[7]
 			deldate_prev = rows[2]
-
+			custgroup_prev = rows[13]
+			itemgroup_prev = rows[6]
+			so_ass_prev = rows[14]
+			status_prev = rows[17]
 			tot_si_qty = tot_si_qty + rows[9]
 
 
@@ -127,7 +130,7 @@ def execute(filters=None):
 				else:
 					if item_pend_qty > 0:
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, " ", " ", " ", " "," ", " " 	
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " " 	
  						]) 
 					item_prev = item_work
 					cust_prev = rows[4]
@@ -136,6 +139,10 @@ def execute(filters=None):
 					desc_prev = rows[7]
 					deldate_prev = rows[2]
 					diff_days_prev = diff_days
+					custgroup_prev = rows[13]
+					itemgroup_prev = rows[6]
+					so_ass_prev = rows[14]
+					status_prev = rows[17]
 					item_del_qty = rows[11]
 					item_pend_qty = 0
 					item_pend_val = 0
@@ -168,7 +175,7 @@ def execute(filters=None):
 				if item_pend_qty > 0:
 
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, " ", " ", " ", " "," ", " " 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " 
 	 				]) 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
@@ -229,6 +236,10 @@ def execute(filters=None):
 				desc_prev = rows[7]
 				deldate_prev = rows[2]
 				diff_days_prev = diff_days
+				custgroup_prev = rows[13]
+				itemgroup_prev = rows[6]
+				so_ass_prev = rows[14]
+				status_prev = rows[17]
 
 									
 		order_count = order_count + 1 
@@ -244,7 +255,7 @@ def execute(filters=None):
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  #				])		 
 	summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, " ", " ", " ", " "," ", " " ]) 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " ]) 
 
 	summ_data.append([" ", " ", " ", " ", " ", " ",
 			 	" ",  tot_pend_qty, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " "
