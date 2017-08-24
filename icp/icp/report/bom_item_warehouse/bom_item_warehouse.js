@@ -102,7 +102,7 @@ frappe.query_reports["BOM Item Warehouse"] = {
                   frappe.throw(" Quantity to Make should be greater than one")
                 }
                 return frappe.call({
-                    method: "nhance.nhance.report.bom_item_warehouse.bom_item_warehouse.check_for_whole_number",
+                    method: "icp.icp.report.bom_item_warehouse.bom_item_warehouse.check_for_whole_number",
                     args: {
                         "bomno": frappe.query_report_filters_by_name.bom.get_value()
                     },
@@ -146,7 +146,7 @@ frappe.query_reports["BOM Item Warehouse"] = {
     var filters = report.get_values();
      if (filters.company && filters.warehouse && filters.bom) {
          return frappe.call({
-             method: "nhance.nhance.report.bom_item_warehouse.bom_item_warehouse.make_stock_requisition",
+             method: "icp.icp.report.bom_item_warehouse.bom_item_warehouse.make_stock_requisition",
              args: {
                  "args": status
              },
