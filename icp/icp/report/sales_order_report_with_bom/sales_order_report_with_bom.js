@@ -32,7 +32,7 @@ frappe.query_reports["Sales Order Report with BoM"] = {
                         "label": __("From Date"),
                         "fieldtype": "Date",
                         "width": "80",
-                        "default": sys_defaults.year_start_date,
+                        "reqd": 1
                 },
                 {
                         "fieldname":"to_date",
