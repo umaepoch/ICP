@@ -32,6 +32,7 @@ def execute(filters=None):
 	tot_pend_qty = 0
 	tot_pend_val = 0
 	item_pend_qty = 0
+	item_pend_rate = 0
 	item_pend_val = 0
 	item_del_qty = 0
 	temp_date = getdate("2001-01-01")
@@ -55,7 +56,7 @@ def execute(filters=None):
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
 			item_map[item]["item_group"], qty_dict.description, item_map[item]["brand"],                    
-                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val
+                        qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
 
@@ -83,6 +84,7 @@ def execute(filters=None):
 			item_pend_qty = rows[9] - rows[11]
 			tot_pend_qty = tot_pend_qty + item_pend_qty
 			item_pend_val = rows[19]
+			item_pend_rate = rows[20]
 			item_del_qty = rows[11]
 						
 			if rows[3] == temp_date:
@@ -102,7 +104,7 @@ def execute(filters=None):
 									
 						
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], " ", " ", diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3]
  				]) 
                 else: 
@@ -126,11 +128,13 @@ def execute(filters=None):
 		
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
+					item_pend_rate = rows[20]
 								
 				else:
 					if item_pend_qty > 0:
+						diff_days_temp = getdate(curr_date) - deldate_prev
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " " 	
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " " 	
  						]) 
 					item_prev = item_work
 					cust_prev = rows[4]
@@ -145,6 +149,7 @@ def execute(filters=None):
 					status_prev = rows[17]
 					item_del_qty = rows[11]
 					item_pend_qty = 0
+					item_pend_rate = 0
 					item_pend_val = 0
 					per_qty = 0
 					tot_si_qty = tot_si_qty + rows[9]
@@ -154,6 +159,7 @@ def execute(filters=None):
 					tot_pend_qty = tot_pend_qty + item_pend_qty
 
 					item_pend_val = rows[19]
+					item_pend_rate = rows[20]
 				
 				differ_days = diff_days
 		#		
@@ -168,14 +174,14 @@ def execute(filters=None):
 					rows[3] = " "
 					
 				summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], " ", " ", diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
 			else: 
 				if item_pend_qty > 0:
-
+					diff_days_temp = getdate(curr_date) - deldate_prev
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " 
 	 				]) 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
@@ -193,6 +199,7 @@ def execute(filters=None):
 #				
  #				])	
 				item_pend_qty = 0
+				item_pend_rate = 0
 				item_pend_val = 0
 				tot_si_qty = 0
 				tot_del_qty = 0
@@ -210,6 +217,7 @@ def execute(filters=None):
 				tot_pend_qty = tot_pend_qty + item_pend_qty
 
 				item_pend_val = rows[19] - item_pend_val
+				item_pend_rate = rows[20]
 
 				differ_days = flt(diff_days)
 
@@ -223,7 +231,7 @@ def execute(filters=None):
 					rows[3] = " "
 					
 				summ_data.append([order_work, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], " "," ", diff_days, rows[9],
+			 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
  				]) 
                                 
@@ -255,14 +263,14 @@ def execute(filters=None):
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  #				])		 
 	summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " ]) 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " ]) 
 
 	summ_data.append([" ", " ", " ", " ", " ", " ",
-			 	" ",  tot_pend_qty, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " "
+			 	" ",  tot_pend_qty, 0, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " "
  				])		 
 
 	summ_data.append([" ", " ", " ", " ", " ", "Total Value and Percentage ", " ",
-			 	" ", " ", " ", full_tot_si_amt, full_tot_del_amt, tot_per_amt, tot_per_qty, " ", " ",  " ", " ", " "
+			 	" ", " ", full_tot_si_amt, 0, full_tot_del_amt, tot_per_amt, tot_per_qty, " ", " ",  " ", " ", " "
  				])
 		 
 		 						 
@@ -282,6 +290,7 @@ def get_columns():
 		_("Description")+"::120",
 		_("SO Delivery Date")+":Date:75",
 		_("SO Bal Qty")+":Int:70",
+		_("SO Rate")+":Int:70",
 		_("SO Bal Value")+":Int:70",
 		_("Delay by")+":Int:50",
 		_("SO Qty")+":Int:70",
@@ -340,14 +349,14 @@ def get_conditions(filters):
 def get_sales_details_w_dn(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
+        return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, dni.qty as del_qty, dn.posting_date as delivery_date, dni.amount as total, dni.parent as del_note
                 from `tabDelivery Note Item` dni, `tabDelivery Note` dn, `tabSales Order Item` si, `tabSales Order` so
                 where dni.item_code = si.item_code and dn.status in ("Completed", "To Bill") and so.name = si.parent and dn.name = dni.parent and dni.against_sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" %s order by so.name, si.item_code, dn.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 def get_sales_details_w_inv(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
+        return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
                 where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
@@ -358,7 +367,7 @@ def get_sales_details_wo_dn_inv(filters):
         conditions = get_conditions(filters)
 
 #	if not (conditions):	
-	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
+	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
                 from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent %s and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) and not exists (
                 select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
@@ -407,6 +416,7 @@ def get_item_map(filters):
 		qty_dict.po_no = d.po_no
 		qty_dict.customer_group = d.customer_group
 		qty_dict.description = d.description
+		qty_dict.rate = d.item_rate
 		qty_dict.amount = d.amount
 		qty_dict.billed_amt = d.billed_amt
 		qty_dict.total = d.total
@@ -448,6 +458,7 @@ def get_item_map(filters):
 			qty_dict.status = d.status
 			qty_dict.po_no = d.po_no
 			qty_dict.description = d.description
+			qty_dict.rate = d.item_rate
 			qty_dict.customer_group = d.customer_group
 			qty_dict.amount = d.amount
 			qty_dict.billed_amt = d.billed_amt
@@ -491,6 +502,7 @@ def get_item_map(filters):
 			qty_dict.status = d.status
 			qty_dict.po_no = d.po_no
 			qty_dict.description = d.description
+			qty_dict.rate = d.item_rate
 			qty_dict.customer_group = d.customer_group
 			qty_dict.amount = d.amount
 			qty_dict.billed_amt = d.billed_amt
