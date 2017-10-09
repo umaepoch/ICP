@@ -369,8 +369,8 @@ def get_sales_details_wo_dn_inv(filters):
 #	if not (conditions):	
 	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
                 from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent %s and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
-                select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) and not exists (
-                select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name) order by so.name, si.item_code""" % conditions, as_dict=1)
+                select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name and dni.item_code = si.item_code) and not exists (
+                select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name and sli.item_code = si.item_code) order by so.name, si.item_code""" % conditions, as_dict=1)
 #	else:
 #		return
 
