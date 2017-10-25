@@ -176,11 +176,11 @@ def get_sales_order_entries(filters):
 	conditions = get_conditions(filters)
 
 	if filters.get("include_exploded_items") == "Y":
-		return frappe.db.sql("""select bo.name as bom_name, bo.company, bo.item as bo_item, bo.quantity as bo_qty, bo.project, bi.item_code as bi_item, bi.qty as bi_qty
+		return frappe.db.sql("""select bo.name as bom_name, bo.company, bo.item as bo_item, bo.quantity as bo_qty, bo.project, bi.item_code as bi_item, bi.stock_qty as bi_qty
 					from `tabBOM` bo, `tabBOM Explosion Item` bi where bo.name = bi.parent and bo.docstatus = "1" %s
 					order by bo.name, bi.item_code""" % conditions, as_dict=1)
 	else:
-		return frappe.db.sql("""select bo.name as bom_name, bo.company, bo.item as bo_item, bo.quantity as bo_qty, bo.project, bi.item_code as bi_item, bi.qty as bi_qty
+		return frappe.db.sql("""select bo.name as bom_name, bo.company, bo.item as bo_item, bo.quantity as bo_qty, bo.project, bi.item_code as bi_item, bi.stock_qty as bi_qty
 					from `tabBOM` bo, `tabBOM Item` bi where bo.name = bi.parent and bo.docstatus = "1" %s
 					order by bo.name, bi.item_code""" % conditions, as_dict=1)
 
