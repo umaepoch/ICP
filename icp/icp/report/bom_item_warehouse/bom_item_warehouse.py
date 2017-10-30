@@ -13,8 +13,6 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-
-
 def execute(filters=None):
 	global item_map
 	global whs_flag
@@ -202,6 +200,7 @@ def get_item_warehouse_map(filters):
 
 	if filters.get("warehouse"):
 		temp_whse = filters.get("warehouse")
+
 
 		if temp_whse == 'All':
 			whse, whs_flag = get_warehouses(company)
@@ -402,9 +401,11 @@ def check_for_whole_number_itemwise(item):
 
 
 @frappe.whitelist()
-def make_stock_requisition(args):
+def make_stock_requisition(args, planning_warehouse, required_date, reference_no):
+
 	global required_date_count
-	if getdate(required_date) == getdate(datetime.now().strftime('%Y-%m-%d')):
+#	if getdate(required_date) == getdate(datetime.now().strftime('%Y-%m-%d')):
+	if required_date == getdate(datetime.now().strftime('%Y-%m-%d')):
 		if required_date_count == False:
 			required_date_count = True
 			frappe.throw(_("Required Date is set to today's date, if you still want to proceed click on 'Stock Requisition' again"))
