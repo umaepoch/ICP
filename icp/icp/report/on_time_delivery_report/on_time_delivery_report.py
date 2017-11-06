@@ -20,10 +20,13 @@ def execute(filters=None):
 
         data = []
         summ_data = [] 
-        order_prev = "" 
+        order_prev = ""
+	cust_prev = ""
         order_work = "" 
         item_prev = ""
         item_work = ""
+	desc_prev = ""
+	desc_work = ""
         order_count = 0 
 	item_count = 0
         tot_bal_qty = 0 
@@ -102,7 +105,6 @@ def execute(filters=None):
 				rows[3] = " "
 			diff_days_prev = diff_days
 									
-						
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
@@ -112,6 +114,7 @@ def execute(filters=None):
 						
 			order_work = rows[0]
                         item_work = rows[5]
+			desc_work = rows[7]
 			if rows[3] == temp_date:
 				diff_days = getdate(curr_date) - rows[2]
 
@@ -124,7 +127,7 @@ def execute(filters=None):
 				item_del_qty = item_del_qty + rows[11]
 								
 							
-                                if item_prev == item_work:
+                                if desc_prev == desc_work:
 		
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
@@ -133,14 +136,17 @@ def execute(filters=None):
 				else:
 					if item_pend_qty > 0:
 						diff_days_temp = getdate(curr_date) - deldate_prev
+	
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
- 						]) 
-					item_prev = item_work
+ 						])
+					if item_prev != item_work:
+						item_prev = item_work
+
+					desc_prev = desc_work
 					cust_prev = rows[4]
 					pono_prev = rows[18]
 					sodate_prev = rows[1]
-					desc_prev = rows[7]
 					deldate_prev = rows[2]
 					diff_days_prev = diff_days
 					custgroup_prev = rows[13]
@@ -172,7 +178,6 @@ def execute(filters=None):
 	
 				if rows[3] == temp_date:
 					rows[3] = " "
-					
 				summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
@@ -180,6 +185,7 @@ def execute(filters=None):
 			else: 
 				if item_pend_qty > 0:
 					diff_days_temp = getdate(curr_date) - deldate_prev
+		
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 				]) 
@@ -229,7 +235,7 @@ def execute(filters=None):
 		
 				if rows[3] == temp_date:
 					rows[3] = " "
-					
+		
 				summ_data.append([order_work, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
@@ -238,6 +244,7 @@ def execute(filters=None):
 				
 				order_prev = order_work 
                                 item_prev = item_work
+				desc_prev = desc_work
 				cust_prev = rows[4]
 				pono_prev = rows[18]
 				sodate_prev = rows[1]
@@ -287,7 +294,7 @@ def get_columns():
 		_("Customer PO No")+"::80",
 		_("SO Date")+":Date:75",
 		_("Item")+":Link/Item:100",
-		_("Description")+":Data:120",
+		_("Description")+":Text Editor:120",
 		_("SO Delivery Date")+":Date:75",
 		_("SO Bal Qty")+":Int:70",
 		_("SO Rate")+":Int:70",
@@ -386,13 +393,12 @@ def get_item_map(filters):
 	dle = get_sales_details_w_inv(filters)
 
 	kle = get_sales_details_wo_dn_inv(filters)
-             	
         for d in sle:
                 
                 key = (d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)
 
                 if key not in iwb_map:
-                        iwb_map[key] = frappe._dict({
+                	iwb_map[key] = frappe._dict({
                                 "si_qty": 0.0, "del_qty": 0.0,
 				"pend_qty": 0.0, "amount": 0.0,
 				"total": 0.0,
