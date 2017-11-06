@@ -438,7 +438,7 @@ def get_item_map(filters):
         	                        "val_rate": 0.0, "uom": None
         	                })
 
-        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
+        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)]
 
                 
         	        qty_dict.si_qty = d.si_qty
