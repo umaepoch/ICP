@@ -51,11 +51,11 @@ def execute(filters=None):
 	full_tot_per_qty = 0
 	
 
-        for (sales_order, item, delivery_date, del_note) in sorted(iwb_map):
-                qty_dict = iwb_map[(sales_order, item, delivery_date, del_note)]
+        for (sales_order, item, description, delivery_date, del_note) in sorted(iwb_map):
+                qty_dict = iwb_map[(sales_order, item, description, delivery_date, del_note)]
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
-			item_map[item]["item_group"], qty_dict.description, item_map[item]["brand"],                    
+			item_map[item]["item_group"], description, item_map[item]["brand"],                    
                         qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
@@ -105,7 +105,7 @@ def execute(filters=None):
 						
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
-				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3]
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  				]) 
                 else: 
 
@@ -134,7 +134,7 @@ def execute(filters=None):
 					if item_pend_qty > 0:
 						diff_days_temp = getdate(curr_date) - deldate_prev
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " " 	
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
  						]) 
 					item_prev = item_work
 					cust_prev = rows[4]
@@ -175,13 +175,13 @@ def execute(filters=None):
 					
 				summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
-				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
  				]) 
 			else: 
 				if item_pend_qty > 0:
 					diff_days_temp = getdate(curr_date) - deldate_prev
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 				]) 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
@@ -232,7 +232,7 @@ def execute(filters=None):
 					
 				summ_data.append([order_work, rows[4], rows[18], rows[1],
 			 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
-				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3] 
+				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  				]) 
                                 
 				
@@ -263,14 +263,14 @@ def execute(filters=None):
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  #				])		 
 	summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " " ]) 
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ", " " ]) 
 
 	summ_data.append([" ", " ", " ", " ", " ", " ",
-			 	" ",  tot_pend_qty, 0, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " "
+			 	" ",  tot_pend_qty, 0, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " ", " "
  				])		 
 
 	summ_data.append([" ", " ", " ", " ", " ", "Total Value and Percentage ", " ",
-			 	" ", " ", full_tot_si_amt, 0, full_tot_del_amt, tot_per_amt, tot_per_qty, " ", " ",  " ", " ", " "
+			 	" ", " ", full_tot_si_amt, 0, full_tot_del_amt, tot_per_amt, tot_per_qty, " ", " ",  " ", " ", " ", " "
  				])
 		 
 		 						 
@@ -287,7 +287,7 @@ def get_columns():
 		_("Customer PO No")+"::80",
 		_("SO Date")+":Date:75",
 		_("Item")+":Link/Item:100",
-		_("Description")+"::120",
+		_("Description")+":Data:120",
 		_("SO Delivery Date")+":Date:75",
 		_("SO Bal Qty")+":Int:70",
 		_("SO Rate")+":Int:70",
@@ -301,7 +301,9 @@ def get_columns():
 		_("SO Assigned")+"::80",
 		_("SO Status")+"::80",
 		_("Delivery Note")+":Link/Delivery Note:100",
-		_("DN Date")+":Date:80"            
+		_("DN Date")+":Date:80",
+		_("DN Amount")+":Int:80"
+
        	        		
 		 
          ]
@@ -387,7 +389,7 @@ def get_item_map(filters):
              	
         for d in sle:
                 
-                key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
+                key = (d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)
 
                 if key not in iwb_map:
                         iwb_map[key] = frappe._dict({
@@ -397,7 +399,7 @@ def get_item_map(filters):
                                 "val_rate": 0.0, "uom": None
                         })
 
-                qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
+                qty_dict = iwb_map[(d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)]
 
                 
                 qty_dict.si_qty = d.si_qty
@@ -415,7 +417,7 @@ def get_item_map(filters):
 		qty_dict.status = d.status
 		qty_dict.po_no = d.po_no
 		qty_dict.customer_group = d.customer_group
-		qty_dict.description = d.description
+#		qty_dict.description = d.description
 		qty_dict.rate = d.item_rate
 		qty_dict.amount = d.amount
 		qty_dict.billed_amt = d.billed_amt
@@ -427,7 +429,7 @@ def get_item_map(filters):
 	if dle:
 		for d in dle:
 
-        	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
+        	        key = (d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)
         	        if key not in iwb_map:
         	                iwb_map[key] = frappe._dict({
         	                        "si_qty": 0.0, "del_qty": 0.0,
@@ -457,7 +459,7 @@ def get_item_map(filters):
 			qty_dict.assigned_to = d._assign
 			qty_dict.status = d.status
 			qty_dict.po_no = d.po_no
-			qty_dict.description = d.description
+#			qty_dict.description = d.description
 			qty_dict.rate = d.item_rate
 			qty_dict.customer_group = d.customer_group
 			qty_dict.amount = d.amount
@@ -471,7 +473,7 @@ def get_item_map(filters):
 	if kle:
 		for d in kle:
 
-        	        key = (d.sales_order, d.item_code, d.delivery_date, d.del_note)
+        	        key = (d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)
         	        if key not in iwb_map:
         	                iwb_map[key] = frappe._dict({
         	                        "si_qty": 0.0, "del_qty": 0.0,
@@ -480,7 +482,7 @@ def get_item_map(filters):
         	                        "val_rate": 0.0, "uom": None
         	                })
 
-        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.delivery_date, d.del_note)]
+        	        qty_dict = iwb_map[(d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)]
 
                 
         	        qty_dict.si_qty = d.si_qty
@@ -501,7 +503,7 @@ def get_item_map(filters):
 			qty_dict.assigned_to = d._assign
 			qty_dict.status = d.status
 			qty_dict.po_no = d.po_no
-			qty_dict.description = d.description
+#			qty_dict.description = d.description
 			qty_dict.rate = d.item_rate
 			qty_dict.customer_group = d.customer_group
 			qty_dict.amount = d.amount
