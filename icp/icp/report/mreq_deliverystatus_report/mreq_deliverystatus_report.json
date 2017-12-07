@@ -1,0 +1,37 @@
+{
+ "add_total_row": 0, 
+ "apply_user_permissions": 1, 
+ "creation": "2017-12-07 16:33:34.599856", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "GST Letterhead Unit2", 
+ "modified": "2017-12-07 16:54:59.846014", 
+ "modified_by": "Administrator", 
+ "module": "Icp", 
+ "name": "Mreq-DeliveryStatus Report", 
+ "owner": "Administrator", 
+ "query": "Select pi.material_request, mr.modified_by, mr.status, mr.docstatus, pi.parent, pi.item_code, pi.description, pi.expected_delivery_date, pi.revised_delivery_date, pi.qty, pi.received_qty, (pi.received_qty/pi.qty*100) from `tabPurchase Order Item` pi, `tabMaterial Request` mr where pi.material_request = mr.name and mr.docstatus in (\"0\", \"1\") ;\n\n", 
+ "ref_doctype": "Material Request", 
+ "report_name": "Mreq-DeliveryStatus Report", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Read all"
+  }, 
+  {
+   "role": "Purchase Manager"
+  }, 
+  {
+   "role": "Stock Manager"
+  }, 
+  {
+   "role": "Stock User"
+  }, 
+  {
+   "role": "Purchase User"
+  }
+ ]
+}
