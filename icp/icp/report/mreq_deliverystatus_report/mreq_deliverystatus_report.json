@@ -8,18 +8,18 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "GST Letterhead Unit2", 
- "modified": "2017-12-07 16:54:59.846014", 
+ "modified": "2017-12-08 13:20:31.596333", 
  "modified_by": "Administrator", 
  "module": "Icp", 
  "name": "Mreq-DeliveryStatus Report", 
  "owner": "Administrator", 
- "query": "Select pi.material_request, mr.modified_by, mr.status, mr.docstatus, pi.parent, pi.item_code, pi.description, pi.expected_delivery_date, pi.revised_delivery_date, pi.qty, pi.received_qty, (pi.received_qty/pi.qty*100) from `tabPurchase Order Item` pi, `tabMaterial Request` mr where pi.material_request = mr.name and mr.docstatus in (\"0\", \"1\") ;\n\n", 
+ "query": "Select pi.material_request, mr.modified_by, mr.status, mr.docstatus, pi.parent, pi.item_code, pi.description, pi.expected_delivery_date, pi.revised_delivery_date, pi.qty, pi.received_qty, (pi.received_qty/pi.qty*100) from `tabPurchase Order Item` pi, `tabMaterial Request` mr where pi.material_request = mr.name and mr.docstatus in (\"0\", \"1\") and mr.modified_by=%(modified_by)s;\n\n", 
  "ref_doctype": "Material Request", 
  "report_name": "Mreq-DeliveryStatus Report", 
- "report_type": "Query Report", 
+ "report_type": "Script Report", 
  "roles": [
   {
-   "role": "Read all"
+   "role": "Read All"
   }, 
   {
    "role": "Purchase Manager"
