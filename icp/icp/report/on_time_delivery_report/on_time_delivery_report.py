@@ -379,7 +379,7 @@ def get_conditions(filters):
                 conditions += " and si.item_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
 	
 	if filters.get("cust_group"):
-                conditions += " and so.customer_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
+                conditions += " and so.customer_group = '%s'" % frappe.db.escape(filters.get("cust_group"), percent=False)
 
         if filters.get("customer"):
                 conditions += " and so.customer = '%s'" % frappe.db.escape(filters.get("customer"), percent=False)
