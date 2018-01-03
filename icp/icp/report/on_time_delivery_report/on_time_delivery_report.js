@@ -45,6 +45,7 @@ frappe.query_reports["On Time Delivery Report"] = {
                         "label": __("Status"),
 			"fieldtype": "Select",
 			"options": [
+				{ "value": "All", "label": __("All") },
 				{ "value": "Completed", "label": __("Completed") },
 				{ "value": "To Deliver", "label": __("To Deliver") },
 				{ "value": "To Deliver and Bill", "label": __("To Deliver and Bill") },
@@ -88,6 +89,13 @@ frappe.query_reports["On Time Delivery Report"] = {
                         "label": __("Item Group"),
                         "fieldtype": "Link",
                         "options": "Item Group"
+                },
+
+{
+                        "fieldname":"cust_group",
+                        "label": __("Customer Group"),
+                        "fieldtype": "Link",
+                        "options": "Customer Group"
                 },
 		
 		

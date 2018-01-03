@@ -350,13 +350,18 @@ def get_conditions(filters):
                 conditions += " and si.parent = '%s'" % frappe.db.escape(filters.get("name"), percent=False)
 
 	if filters.get("so_status"):
-                conditions += " and so.status = '%s'" % frappe.db.escape(filters.get("so_status"), percent=False)
+		so_status = filters.get("so_status")
+		if so_status != "All":
+	                conditions += " and so.status = '%s'" % frappe.db.escape(filters.get("so_status"), percent=False)
 
 	if filters.get("doc_status"):
                 conditions += " and so.docstatus = '%s'" % frappe.db.escape(filters.get("doc_status"), percent=False)
 	
 	if filters.get("item_group"):
                 conditions += " and si.item_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
+	
+	if filters.get("cust_group"):
+                conditions += " and so.customer_group = '%s'" % frappe.db.escape(filters.get("item_group"), percent=False)
 
         if filters.get("customer"):
                 conditions += " and so.customer = '%s'" % frappe.db.escape(filters.get("customer"), percent=False)
