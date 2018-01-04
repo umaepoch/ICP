@@ -134,9 +134,11 @@ def execute(filters=None):
 			
 				
 			if order_prev == order_work: 
+				
 				tot_del_qty = tot_del_qty + rows[11]
+				frappe.msgprint(_(rows[11]))
 				item_del_qty = item_del_qty + rows[11]
-								
+				frappe.msgprint(_(item_del_qty))				
 							
                                 if desc_prev == desc_work:
 		
