@@ -132,7 +132,7 @@ def execute(filters=None):
 				tot_del_qty = tot_del_qty + rows[11]
 												
 							
-                                if desc_prev == desc_work:
+                                if item_prev == item_work:
 					item_del_qty = item_del_qty + rows[11]
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
