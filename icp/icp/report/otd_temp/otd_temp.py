@@ -141,6 +141,7 @@ def execute(filters=None):
 							
                                 if desc_prev == desc_work:
 					item_del_qty = item_del_qty + rows[11]	
+					frappe.msgprint(_("Del 1"))
 					frappe.msgprint(_(item_del_qty))	
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
@@ -184,8 +185,12 @@ def execute(filters=None):
 					tot_si_qty = tot_si_qty + rows[9]
 					full_tot_si_amt = full_tot_si_amt + rows[15]
 					full_tot_si_qty = full_tot_si_qty + rows[9]	
-					item_pend_qty = rows[9] - item_del_qty
+					item_pend_qty = rows[9] - rows[11]
+					frappe.msgprint(_("Del 2"))
+					frappe.msgprint(_(item_del_qty))	
+
 					item_del_qty = rows[11]
+
 					tot_pend_qty = tot_pend_qty + item_pend_qty
 
 					item_pend_val = rows[19]
