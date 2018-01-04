@@ -168,6 +168,7 @@ def execute(filters=None):
 						item_prev = item_work
 
 					desc_prev = desc_work
+					desc_work = rows[7]
 					cust_prev = rows[4]
 					pono_prev = rows[18]
 					sodate_prev = rows[1]
