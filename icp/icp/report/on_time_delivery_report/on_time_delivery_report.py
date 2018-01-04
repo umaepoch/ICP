@@ -66,7 +66,7 @@ def execute(filters=None):
                 qty_dict = iwb_map[(sales_order, item, description, delivery_date, del_note)]
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
-			item_map[item]["item_group"], description, item_map[item]["brand"],                    
+			item_map[item]["item_group"], item_map[item]["description"], item_map[item]["brand"],                    
                         qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
@@ -130,11 +130,10 @@ def execute(filters=None):
 				
 			if order_prev == order_work: 
 				tot_del_qty = tot_del_qty + rows[11]
-				item_del_qty = item_del_qty + rows[11]
-								
+												
 							
                                 if desc_prev == desc_work:
-		
+					item_del_qty = item_del_qty + rows[11]
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
 					item_pend_rate = rows[20]

@@ -61,16 +61,15 @@ def execute(filters=None):
 	tot_per_qty = 0
 	full_tot_per_qty = 0
 	
-	frappe.msgprint(_(iwb_map))
         for (sales_order, item, description, delivery_date, del_note) in sorted(iwb_map):
                 qty_dict = iwb_map[(sales_order, item, description, delivery_date, del_note)]
                 data.append([
                         sales_order, qty_dict.so_date, qty_dict.so_del_date, delivery_date, qty_dict.customer, item, 
-			item_map[item]["item_group"], description, item_map[item]["brand"],                    
+			item_map[item]["item_group"], item_map[item]["description"], item_map[item]["brand"],                    
                         qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
-	frappe.msgprint(_(data))
+	
 	for rows in data: 
 		frappe.msgprint(_(rows[0]))
 		frappe.msgprint(_(rows[5]))
@@ -83,6 +82,8 @@ def execute(filters=None):
 			pono_prev = rows[18]
 			sodate_prev = rows[1]
 			desc_prev = rows[7]
+			if desc_prev == "-":
+				desc_prev = item_prev
 			deldate_prev = rows[2]
 			custgroup_prev = rows[13]
 			itemgroup_prev = rows[6]
@@ -126,6 +127,11 @@ def execute(filters=None):
 			order_work = rows[0]
                         item_work = rows[5]
 			desc_work = rows[7]
+			if desc_work == '-':
+				desc_work = item_work
+			frappe.msgprint(_(desc_prev))
+			frappe.msgprint(_(rows[7]))
+			frappe.msgprint(_(desc_work))
 			if rows[3] == temp_date:
 				diff_days = getdate(curr_date) - rows[2]
 
@@ -137,7 +143,8 @@ def execute(filters=None):
 				
 				tot_del_qty = tot_del_qty + rows[11]
 				frappe.msgprint(_(rows[11]))
-					
+				frappe.msgprint(_(desc_prev))
+				frappe.msgprint(_(desc_work))	
 							
                                 if desc_prev == desc_work:
 					item_del_qty = item_del_qty + rows[11]	
@@ -169,6 +176,8 @@ def execute(filters=None):
 
 					desc_prev = desc_work
 					desc_work = rows[7]
+					if desc_work == "-":
+						desc_work = rows[5]
 					cust_prev = rows[4]
 					pono_prev = rows[18]
 					sodate_prev = rows[1]
@@ -299,7 +308,10 @@ def execute(filters=None):
 				
 				order_prev = order_work 
                                 item_prev = item_work
-				desc_prev = desc_work
+				if desc_work == "-":
+					desc_prev = item_work
+				else:
+					desc_prev = desc_work
 				cust_prev = rows[4]
 				pono_prev = rows[18]
 				sodate_prev = rows[1]
@@ -427,7 +439,7 @@ def get_sales_details_w_inv(filters):
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and so.name = "SO-00021" and not exists (
+                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and so.name = "SO-00022" and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 
