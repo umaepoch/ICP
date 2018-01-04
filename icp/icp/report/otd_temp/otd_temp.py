@@ -137,11 +137,11 @@ def execute(filters=None):
 				
 				tot_del_qty = tot_del_qty + rows[11]
 				frappe.msgprint(_(rows[11]))
-				item_del_qty = item_del_qty + rows[11]
-				frappe.msgprint(_(item_del_qty))				
+					
 							
                                 if desc_prev == desc_work:
-		
+					item_del_qty = item_del_qty + rows[11]	
+					frappe.msgprint(_(item_del_qty))	
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
 					item_pend_rate = rows[20]
