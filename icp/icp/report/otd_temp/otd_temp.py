@@ -61,7 +61,7 @@ def execute(filters=None):
 	tot_per_qty = 0
 	full_tot_per_qty = 0
 	
-
+	frappe.msgprint(_(iwb_map))
         for (sales_order, item, description, delivery_date, del_note) in sorted(iwb_map):
                 qty_dict = iwb_map[(sales_order, item, description, delivery_date, del_note)]
                 data.append([
@@ -70,7 +70,7 @@ def execute(filters=None):
                         qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
-
+	frappe.msgprint(_(data))
 	for rows in data: 
 		frappe.msgprint(_(rows[0]))
 		frappe.msgprint(_(rows[5]))
@@ -178,7 +178,7 @@ def execute(filters=None):
 					itemgroup_prev = rows[6]
 					so_ass_prev = rows[14]
 					status_prev = rows[17]
-#					item_del_qty = rows[11]
+					item_del_qty = rows[11]
 					item_pend_qty = 0
 					item_pend_rate = 0
 					item_pend_val = 0
@@ -190,7 +190,7 @@ def execute(filters=None):
 					frappe.msgprint(_("Del 2"))
 					frappe.msgprint(_(item_del_qty))	
 
-					item_del_qty = rows[11]
+#					item_del_qty = rows[11]
 
 					tot_pend_qty = tot_pend_qty + item_pend_qty
 
@@ -427,7 +427,7 @@ def get_sales_details_w_inv(filters):
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and so.name = "SO/17-18/00290" and not exists (
+                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and so.name = "SO-00021" and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 
