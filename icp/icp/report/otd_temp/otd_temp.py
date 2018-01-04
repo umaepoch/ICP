@@ -442,9 +442,9 @@ def get_item_map(filters):
  #       to_date = getdate(filters["to_date"])
 	
 #        sle = get_sales_details_w_dn(filters)
-        
+        sle = []
 	dle = get_sales_details_w_inv(filters)
-
+	kle = []
 #	kle = get_sales_details_wo_dn_inv(filters)
         for d in sle:
                 
