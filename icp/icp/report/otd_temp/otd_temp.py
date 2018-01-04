@@ -176,7 +176,7 @@ def execute(filters=None):
 					itemgroup_prev = rows[6]
 					so_ass_prev = rows[14]
 					status_prev = rows[17]
-					item_del_qty = rows[11]
+#					item_del_qty = rows[11]
 					item_pend_qty = 0
 					item_pend_rate = 0
 					item_pend_val = 0
@@ -185,6 +185,7 @@ def execute(filters=None):
 					full_tot_si_amt = full_tot_si_amt + rows[15]
 					full_tot_si_qty = full_tot_si_qty + rows[9]	
 					item_pend_qty = rows[9] - item_del_qty
+					item_del_qty = rows[11]
 					tot_pend_qty = tot_pend_qty + item_pend_qty
 
 					item_pend_val = rows[19]
@@ -249,7 +250,7 @@ def execute(filters=None):
 				item_pend_val = 0
 				tot_si_qty = 0
 				tot_del_qty = 0
-
+				item_del_qty = 0
 				tot_del_on_time = 0
 				per_qty = 0
                                 tot_si_qty = tot_si_qty + rows[9]
