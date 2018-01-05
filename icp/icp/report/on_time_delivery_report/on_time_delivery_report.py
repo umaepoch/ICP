@@ -146,6 +146,9 @@ def execute(filters=None):
  							])
 							tot_pend_qty = tot_pend_qty + item_pend_qty
 					else:
+						if item_pend_qty < 0:
+							item_pend_qty = 0
+
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
  						])
 						tot_pend_qty = tot_pend_qty + item_pend_qty
@@ -194,10 +197,11 @@ def execute(filters=None):
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
  						]) 
 				else:
+					
 					summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 			rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
-						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
- 						]) 
+			 		rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
+					 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
+ 					]) 
 			else: 
 				diff_days_temp = getdate(curr_date) - deldate_prev
 				if status_prev == "To Deliver and Bill":
@@ -205,12 +209,16 @@ def execute(filters=None):
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 					]) 
-						tot_pend_qty = tot_pend_qty + item_pend_qty
+
 				else:
+					if item_pend_qty < 0:
+						item_pend_qty = 0
+
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 				]) 
-					tot_pend_qty = tot_pend_qty + item_pend_qty
+				
+				tot_pend_qty = tot_pend_qty + item_pend_qty
 					
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
