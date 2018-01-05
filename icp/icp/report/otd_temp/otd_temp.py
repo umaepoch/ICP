@@ -61,6 +61,7 @@ def execute(filters=None):
 	tot_per_qty = 0
 	full_tot_per_qty = 0
 	
+
         for (sales_order, item, description, delivery_date, del_note) in sorted(iwb_map):
                 qty_dict = iwb_map[(sales_order, item, description, delivery_date, del_note)]
                 data.append([
@@ -69,12 +70,8 @@ def execute(filters=None):
                         qty_dict.si_qty, del_note, qty_dict.del_qty, qty_dict.pend_qty, qty_dict.customer_group, qty_dict.assigned_to, 				qty_dict.amount, qty_dict.total, qty_dict.status, qty_dict.po_no, qty_dict.pend_val, qty_dict.rate
                         
                     ])
-	
+
 	for rows in data: 
-		frappe.msgprint(_(rows[0]))
-		frappe.msgprint(_(rows[5]))
-		frappe.msgprint(_(rows[9]))
-		frappe.msgprint(_(rows[11]))
        		if order_count == 0: 
        			order_prev = rows[0] 
  			item_prev = rows[5]
@@ -82,8 +79,6 @@ def execute(filters=None):
 			pono_prev = rows[18]
 			sodate_prev = rows[1]
 			desc_prev = rows[7]
-			if desc_prev == "-":
-				desc_prev = item_prev
 			deldate_prev = rows[2]
 			custgroup_prev = rows[13]
 			itemgroup_prev = rows[6]
@@ -97,12 +92,14 @@ def execute(filters=None):
                         tot_del_qty = tot_del_qty + rows[11] 
 			
 			item_pend_qty = rows[9] - rows[11]
+			frappe.msgprint(_("Pend 1"))
+			frappe.msgprint(_(item_pend_qty))
+			frappe.msgprint(_(tot_pend_qty))
 			tot_pend_qty = tot_pend_qty + item_pend_qty
 			item_pend_val = rows[19]
 			item_pend_rate = rows[20]
 			item_del_qty = rows[11]
-			frappe.msgprint(_("Pend 1"))
-			frappe.msgprint(_(item_pend_qty))						
+						
 			if rows[3] == temp_date:
 				diff_days = getdate(curr_date) - rows[2]
 			else:
@@ -127,11 +124,6 @@ def execute(filters=None):
 			order_work = rows[0]
                         item_work = rows[5]
 			desc_work = rows[7]
-			if desc_work == '-':
-				desc_work = item_work
-			frappe.msgprint(_(desc_prev))
-			frappe.msgprint(_(rows[7]))
-			frappe.msgprint(_(desc_work))
 			if rows[3] == temp_date:
 				diff_days = getdate(curr_date) - rows[2]
 
@@ -140,44 +132,34 @@ def execute(filters=None):
 			
 				
 			if order_prev == order_work: 
-				
 				tot_del_qty = tot_del_qty + rows[11]
-				frappe.msgprint(_(rows[11]))
-				frappe.msgprint(_(desc_prev))
-				frappe.msgprint(_(desc_work))	
+												
 							
-                                if desc_prev == desc_work:
-					item_del_qty = item_del_qty + rows[11]	
-					frappe.msgprint(_("Del 1"))
-					frappe.msgprint(_(item_del_qty))	
+                                if item_prev == item_work:
+					item_del_qty = item_del_qty + rows[11]
 					item_pend_qty = rows[9] - item_del_qty
 					item_pend_val = rows[19]
 					item_pend_rate = rows[20]
-					frappe.msgprint(_("Pend 2"))
-					frappe.msgprint(_(item_pend_qty))						
-
 								
 				else:
 					diff_days_temp = getdate(curr_date) - deldate_prev
-					frappe.msgprint(_("Pend 3"))
-					frappe.msgprint(_(item_pend_qty))						
-	
-					if rows[17] == "To Deliver and Bill":
+					if status_prev == "To Deliver and Bill":
 						if item_pend_qty > 0:				
 	
 							summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
  						])
 					else:
-						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
+						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
  						])
 
 					if item_prev != item_work:
 						item_prev = item_work
+						tot_pend_qty = tot_pend_qty + item_pend_qty
+						frappe.msgprint(_("Pend 2"))
+						frappe.msgprint(_(item_pend_qty))
+						frappe.msgprint(_(tot_pend_qty))
 
 					desc_prev = desc_work
-					desc_work = rows[7]
-					if desc_work == "-":
-						desc_work = rows[5]
 					cust_prev = rows[4]
 					pono_prev = rows[18]
 					sodate_prev = rows[1]
@@ -195,13 +177,7 @@ def execute(filters=None):
 					tot_si_qty = tot_si_qty + rows[9]
 					full_tot_si_amt = full_tot_si_amt + rows[15]
 					full_tot_si_qty = full_tot_si_qty + rows[9]	
-					item_pend_qty = rows[9] - rows[11]
-					frappe.msgprint(_("Del 2"))
-					frappe.msgprint(_(item_del_qty))	
-
-#					item_del_qty = rows[11]
-
-					tot_pend_qty = tot_pend_qty + item_pend_qty
+					item_pend_qty = rows[9] - item_del_qty
 
 					item_pend_val = rows[19]
 					item_pend_rate = rows[20]
@@ -217,10 +193,7 @@ def execute(filters=None):
 	
 				if rows[3] == temp_date:
 					rows[3] = " "
-				frappe.msgprint(_("Pend 4"))
-				frappe.msgprint(_(item_pend_qty))						
-
-				if rows[17] == "To Deliver and Bill":
+				if status_prev == "To Deliver and Bill":
 					if item_pend_qty > 0:
 						summ_data.append([order_prev, rows[4], rows[18], rows[1],
 			 			rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
@@ -233,9 +206,6 @@ def execute(filters=None):
  						]) 
 			else: 
 				diff_days_temp = getdate(curr_date) - deldate_prev
-				frappe.msgprint(_("Pend 5"))
-				frappe.msgprint(_(item_pend_qty))						
-
 				if status_prev == "To Deliver and Bill":
 					if item_pend_qty > 0:		
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
@@ -243,7 +213,7 @@ def execute(filters=None):
 	 				]) 
 				else:
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 				]) 
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
@@ -265,7 +235,7 @@ def execute(filters=None):
 				item_pend_val = 0
 				tot_si_qty = 0
 				tot_del_qty = 0
-				item_del_qty = 0
+
 				tot_del_on_time = 0
 				per_qty = 0
                                 tot_si_qty = tot_si_qty + rows[9]
@@ -277,6 +247,10 @@ def execute(filters=None):
 				item_del_qty = rows[11]		 	 
 				item_pend_qty = rows[9] - rows[11] - item_pend_qty
 				tot_pend_qty = tot_pend_qty + item_pend_qty
+				frappe.msgprint(_("Pend 3"))
+				frappe.msgprint(_(item_pend_qty))
+				frappe.msgprint(_(tot_pend_qty))
+
 
 				item_pend_val = rows[19] - item_pend_val
 				item_pend_rate = rows[20]
@@ -291,10 +265,7 @@ def execute(filters=None):
 		
 				if rows[3] == temp_date:
 					rows[3] = " "
-				frappe.msgprint(_("Pend 6"))
-				frappe.msgprint(_(item_pend_qty))						
-
-				if rows[17] == "To Deliver and Bill":
+				if status_prev == "To Deliver and Bill":
 					if item_pend_qty >0:
 						summ_data.append([order_work, rows[4], rows[18], rows[1],
 					 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
@@ -308,10 +279,7 @@ def execute(filters=None):
 				
 				order_prev = order_work 
                                 item_prev = item_work
-				if desc_work == "-":
-					desc_prev = item_work
-				else:
-					desc_prev = desc_work
+				desc_prev = desc_work
 				cust_prev = rows[4]
 				pono_prev = rows[18]
 				sodate_prev = rows[1]
@@ -439,7 +407,7 @@ def get_sales_details_w_inv(filters):
 	
         return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, sli.qty as del_qty, sl.posting_date as delivery_date, sli.amount as total, sli.parent as del_note
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and so.name = "SO-00022" and not exists (
+                where sli.item_code = si.item_code and so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and si.item_group != "Consumable" and si.item_group != "Raw Material" and sl.update_stock = 1 and sl.status != "Cancelled" %s and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name) order by so.name, si.item_code, sl.posting_date asc, si.warehouse""" % conditions, as_dict=1)
 
 
@@ -460,11 +428,11 @@ def get_item_map(filters):
 #        from_date = getdate(filters["from_date"])
  #       to_date = getdate(filters["to_date"])
 	
-#        sle = get_sales_details_w_dn(filters)
-        sle = []
+        sle = get_sales_details_w_dn(filters)
+        
 	dle = get_sales_details_w_inv(filters)
-	kle = []
-#	kle = get_sales_details_wo_dn_inv(filters)
+
+	kle = get_sales_details_wo_dn_inv(filters)
         for d in sle:
                 
                 key = (d.sales_order, d.item_code, d.description, d.delivery_date, d.del_note)

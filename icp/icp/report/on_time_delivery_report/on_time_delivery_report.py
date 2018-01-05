@@ -151,7 +151,7 @@ def execute(filters=None):
 
 					if item_prev != item_work:
 						item_prev = item_work
-
+						tot_pend_qty = tot_pend_qty + item_pend_qty
 					desc_prev = desc_work
 					cust_prev = rows[4]
 					pono_prev = rows[18]
@@ -171,7 +171,6 @@ def execute(filters=None):
 					full_tot_si_amt = full_tot_si_amt + rows[15]
 					full_tot_si_qty = full_tot_si_qty + rows[9]	
 					item_pend_qty = rows[9] - item_del_qty
-					tot_pend_qty = tot_pend_qty + item_pend_qty
 
 					item_pend_val = rows[19]
 					item_pend_rate = rows[20]
