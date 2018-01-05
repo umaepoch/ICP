@@ -92,7 +92,7 @@ def execute(filters=None):
                         tot_del_qty = tot_del_qty + rows[11] 
 			
 			item_pend_qty = rows[9] - rows[11]
-			tot_pend_qty = tot_pend_qty + item_pend_qty
+#			tot_pend_qty = tot_pend_qty + item_pend_qty
 			item_pend_val = rows[19]
 			item_pend_rate = rows[20]
 			item_del_qty = rows[11]
@@ -151,7 +151,7 @@ def execute(filters=None):
 
 					if item_prev != item_work:
 						item_prev = item_work
-						tot_pend_qty = tot_pend_qty + item_pend_qty
+					tot_pend_qty = tot_pend_qty + item_pend_qty
 					desc_prev = desc_work
 					cust_prev = rows[4]
 					pono_prev = rows[18]
@@ -223,6 +223,7 @@ def execute(filters=None):
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
 #				
  #				])	
+				tot_pend_qty = tot_pend_qty + item_pend_qty
 				item_pend_qty = 0
 				item_pend_rate = 0
 				item_pend_val = 0
@@ -239,7 +240,7 @@ def execute(filters=None):
 
 				item_del_qty = rows[11]		 	 
 				item_pend_qty = rows[9] - rows[11] - item_pend_qty
-				tot_pend_qty = tot_pend_qty + item_pend_qty
+
 
 				item_pend_val = rows[19] - item_pend_val
 				item_pend_rate = rows[20]
@@ -289,6 +290,7 @@ def execute(filters=None):
 	else:
 		tot_per_amt = 0
 		tot_per_qty = 0
+	tot_pend_qty = tot_pend_qty + item_pend_qty	
 
 #	summ_data.append([" ", " ", " ", order_prev, " ", 
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
