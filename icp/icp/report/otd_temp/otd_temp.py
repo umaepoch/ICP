@@ -92,10 +92,6 @@ def execute(filters=None):
                         tot_del_qty = tot_del_qty + rows[11] 
 			
 			item_pend_qty = rows[9] - rows[11]
-			frappe.msgprint(_("Pend 1"))
-			frappe.msgprint(_(item_pend_qty))
-			frappe.msgprint(_(tot_pend_qty))
-			tot_pend_qty = tot_pend_qty + item_pend_qty
 			item_pend_val = rows[19]
 			item_pend_rate = rows[20]
 			item_del_qty = rows[11]
@@ -147,18 +143,16 @@ def execute(filters=None):
 						if item_pend_qty > 0:				
 	
 							summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
- 						])
+ 							])
+							tot_pend_qty = tot_pend_qty + item_pend_qty
 					else:
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
  						])
+						tot_pend_qty = tot_pend_qty + item_pend_qty
 
 					if item_prev != item_work:
 						item_prev = item_work
-					tot_pend_qty = tot_pend_qty + item_pend_qty
-					frappe.msgprint(_("Pend 2"))
-					frappe.msgprint(_(item_pend_qty))
-					frappe.msgprint(_(tot_pend_qty))
-
+											
 					desc_prev = desc_work
 					cust_prev = rows[4]
 					pono_prev = rows[18]
@@ -210,11 +204,14 @@ def execute(filters=None):
 					if item_pend_qty > 0:		
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
-	 				]) 
+	 					]) 
+						tot_pend_qty = tot_pend_qty + item_pend_qty
 				else:
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
 					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
 	 				]) 
+					tot_pend_qty = tot_pend_qty + item_pend_qty
+					
 				if rows[17] == 'Closed' or rows[17] == 'Completed':
 					if tot_del_qty > 0:
 						tot_per_qty = (tot_del_on_time / tot_del_qty) * 100
@@ -229,8 +226,8 @@ def execute(filters=None):
 				#summ_data.append([" ", " ", " ", order_prev, " ", 
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
 #				
- #				])
-				tot_pend_qty = tot_pend_qty + item_pend_qty	
+ #				])	
+					
 				item_pend_qty = 0
 				item_pend_rate = 0
 				item_pend_val = 0
@@ -247,10 +244,6 @@ def execute(filters=None):
 
 				item_del_qty = rows[11]		 	 
 				item_pend_qty = rows[9] - rows[11] - item_pend_qty
-				
-				frappe.msgprint(_("Pend 3"))
-				frappe.msgprint(_(item_pend_qty))
-				frappe.msgprint(_(tot_pend_qty))
 
 
 				item_pend_val = rows[19] - item_pend_val
@@ -273,7 +266,7 @@ def execute(filters=None):
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  						]) 
 				else:
-                                	summ_data.append([order_work, rows[4], rows[18], rows[1],
+					summ_data.append([order_work, rows[4], rows[18], rows[1],
 					 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  						]) 
@@ -302,6 +295,7 @@ def execute(filters=None):
 		tot_per_amt = 0
 		tot_per_qty = 0
 	tot_pend_qty = tot_pend_qty + item_pend_qty	
+
 #	summ_data.append([" ", " ", " ", order_prev, " ", 
 #			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
  #				])		 

@@ -92,7 +92,6 @@ def execute(filters=None):
                         tot_del_qty = tot_del_qty + rows[11] 
 			
 			item_pend_qty = rows[9] - rows[11]
-#			tot_pend_qty = tot_pend_qty + item_pend_qty
 			item_pend_val = rows[19]
 			item_pend_rate = rows[20]
 			item_del_qty = rows[11]
