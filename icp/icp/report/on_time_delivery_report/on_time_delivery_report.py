@@ -111,7 +111,7 @@ def execute(filters=None):
 				rows[3] = " "
 			diff_days_prev = diff_days
 			summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 	rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
+			 	rows[5], rows[7], rows[2], "", "", "", "", rows[9],
 				 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  				]) 
                 else: 
@@ -142,14 +142,14 @@ def execute(filters=None):
 					if status_prev == "To Deliver and Bill":
 						if item_pend_qty > 0:				
 	
-							summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
+							summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, "", "", "", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ,"", "", ""	
  							])
 							tot_pend_qty = tot_pend_qty + item_pend_qty
 					else:
 						if item_pend_qty < 0:
 							item_pend_qty = 0
 
-						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ," ", " ", " "	
+						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev, item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, "", "", "", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev ,"", "", ""	
  						])
 						tot_pend_qty = tot_pend_qty + item_pend_qty
 
@@ -193,13 +193,13 @@ def execute(filters=None):
 				if status_prev == "To Deliver and Bill":
 					if item_pend_qty > 0:
 						summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 			rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
+			 			rows[5], rows[7], rows[2], "", "", "", "", rows[9],
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
  						]) 
 				else:
 					
 					summ_data.append([order_prev, rows[4], rows[18], rows[1],
-			 		rows[5], rows[7], rows[2], " ", " ", " ", " ", rows[9],
+			 		rows[5], rows[7], rows[2], "", "", "", "", rows[9],
 					 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16] 
  					]) 
 			else: 
@@ -207,7 +207,7 @@ def execute(filters=None):
 				if status_prev == "To Deliver and Bill":
 					if item_pend_qty > 0:		
 						summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_temp, "", "", "", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev,"", "",  ""
 	 					])
 						tot_pend_qty = tot_pend_qty + item_pend_qty
 
@@ -216,7 +216,7 @@ def execute(filters=None):
 						item_pend_qty = 0
 
 					summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", " ", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ",  " "
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, "", "", "", custgroup_prev, itemgroup_prev, so_ass_prev, status_prev,"", "",  ""
 	 				]) 
 				
 					tot_pend_qty = tot_pend_qty + item_pend_qty
@@ -232,10 +232,6 @@ def execute(filters=None):
 					else:
 						tot_per_qty = 0
 
-				#summ_data.append([" ", " ", " ", order_prev, " ", 
-#			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", tot_per_qty, tot_pend_qty, " ", " ",  " "   
-#				
- #				])	
 					
 				item_pend_qty = 0
 				item_pend_rate = 0
@@ -271,12 +267,12 @@ def execute(filters=None):
 				if status_prev == "To Deliver and Bill":
 					if item_pend_qty >0:
 						summ_data.append([order_work, rows[4], rows[18], rows[1],
-					 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
+					 	rows[5], rows[7], rows[2], "","", "", "", rows[9],
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  						]) 
 				else:
 					summ_data.append([order_work, rows[4], rows[18], rows[1],
-					 	rows[5], rows[7], rows[2], " "," ", " ", " ", rows[9],
+					 	rows[5], rows[7], rows[2], "", "", "", "", rows[9],
 						 rows[11], per_qty, rows[13], rows[6], rows[14], rows[17], rows[10], rows[3], rows[16]
  						]) 
 				
@@ -305,18 +301,16 @@ def execute(filters=None):
 		tot_per_qty = 0
 	tot_pend_qty = tot_pend_qty + item_pend_qty	
 
-#	summ_data.append([" ", " ", " ", order_prev, " ", 
-#			 	" ", " ", " ", " ", tot_si_qty, tot_del_qty, " ", per_qty, tot_pend_qty, " ", " ",  " " 
- #				])		 
-	summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
-					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, " ", " ", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev," ", " ", " " ]) 
 
-	summ_data.append([" ", " ", " ", " ", " ", " ",
-			 	" ",  tot_pend_qty, 0, 0, " ", full_tot_si_qty, full_tot_del_qty, per_qty, " ", " ",  " ", " ", " ", " ", " "
+	summ_data.append([order_prev, cust_prev, pono_prev, sodate_prev,
+					 	item_prev, desc_prev, deldate_prev, item_pend_qty, item_pend_rate, item_pend_val, diff_days_prev, "", "", per_qty, custgroup_prev, itemgroup_prev, so_ass_prev, status_prev,"", "", "" ]) 
+
+	summ_data.append(["", "", "", "", "", "",
+			 	"",  tot_pend_qty, 0, 0, "", full_tot_si_qty, full_tot_del_qty, per_qty, "", "",  "", "", "", "", ""
  				])		 
 
-	summ_data.append([" ", " ", " ", " ", " ", "Total Value and Percentage ", " ",
-			 	" ", " ", full_tot_si_amt, 0, full_tot_del_amt, tot_per_amt, tot_per_qty, " ", " ",  " ", " ", " ", " "
+	summ_data.append(["", "", "", "", "", "Total Value and Percentage ", "",
+			 	"", "", full_tot_si_amt, 0, full_tot_del_amt, tot_per_amt, tot_per_qty, "", "",  "", "", "", ""
  				])
 		 
 		 						 
@@ -420,7 +414,7 @@ def get_sales_details_wo_dn_inv(filters):
         conditions = get_conditions(filters)
 
 #	if not (conditions):	
-	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, " " as del_note
+	return frappe.db.sql("""select so.name as sales_order, so.po_no, so._assign, so.transaction_date as date, so.customer, so.customer_group as customer_group, so.delivery_date as sodel_date, so.status, si.item_code, si.idx as si_idx, si.description, si.warehouse, si.qty as si_qty, si.delivered_qty as delivered_qty, si.rate as item_rate, si.amount, si.billed_amt, 0 as del_qty, date("2001-01-01") as delivery_date, 0 as total, "" as del_note
                 from `tabSales Order Item` si, `tabSales Order` so where so.name = si.parent %s and si.item_group != "Consumable" and si.item_group != "Raw Material" and not exists (
                 select 1 from `tabDelivery Note Item` dni where dni.against_sales_order = so.name and dni.item_code = si.item_code) and not exists (
                 select 1 from `tabSales Invoice Item` sli where sli.sales_order = so.name and sli.item_code = si.item_code) order by so.name, si.item_code""" % conditions, as_dict=1)
