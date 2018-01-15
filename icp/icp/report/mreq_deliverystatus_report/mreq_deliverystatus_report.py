@@ -57,7 +57,6 @@ def get_conditions(filters):
         if filters.get("requested_by"):
 
 		conditions += " and mr.requested_by = '%s'" % filters.get("requested_by")
-		frappe.msgprint(_(conditions))
 
         return conditions
 
