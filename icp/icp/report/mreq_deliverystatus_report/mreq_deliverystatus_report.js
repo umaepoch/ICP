@@ -21,7 +21,22 @@ frappe.query_reports["Mreq-DeliveryStatus Report"] = {
 				
 			],
 			"default": ""
-                }		
+                },
+
+                {      "fieldname":"from_date",
+                        "label": __("Material Requests From Date"),
+                        "fieldtype": "Date",
+                        "width": "80"
+    //                    "default": sys_defaults.year_start_date,
+                },
+                {
+                        "fieldname":"to_date",
+                        "label": __("Material Requests To Date"),
+                        "fieldtype": "Date",
+                        "width": "80"
+     //                   "default": frappe.datetime.get_today()
+                }
+		
                                   
                 
         ]
