@@ -59,6 +59,15 @@ def get_conditions(filters):
 
 		conditions += " and mr.requested_by = '%s'" % filters.get("requested_by")
 
+        if filters.get("from_date"):
+		conditions += " and mr.transaction_date >= '%s'" % frappe.db.escape(filters["from_date"])
+ #       else:
+#		frappe.throw(_("'From Date' is required"))	
+
+        if filters.get("to_date"):
+                conditions += " and mr.transaction_date <= '%s'" % frappe.db.escape(filters["to_date"])
+
+
         return conditions
 
 def get_mr_details(filters):
