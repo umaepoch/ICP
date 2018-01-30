@@ -29,7 +29,7 @@ def execute(filters=None):
 		else:
 			diff_days = getdate(curr_date) - getdate(qty_dict.item_del_date)
 
-                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.customer_name, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount, qty_dict.amount_to_deliver, qty_dict.item_del_date, diff_days, qty_dict.item_group ])
+                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.customer_name, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.item_del_date, diff_days, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount, qty_dict.amount_to_deliver, qty_dict.item_group ])
 						 
 	return columns, data 
 
@@ -38,22 +38,6 @@ def get_columns():
         """return columns"""
                
         columns = [
-#		{"label": "Assigned To", 'width': 100, "fieldname": "assigned_to", 'fieldtype': 'Data'},
-#		{"label": "Sales Order", 'width': 100, "fieldname": "sales_order", 'fieldtype': 'Data'},
-#		{"label": "Customer", 'width': 100, "fieldname": "customer", 'fieldtype': 'Data'},
-#		{"label": "Customer Name", 'width': 100, "fieldname": "customer_name", 'fieldtype': 'Data'},
-#		{"label": "Date", 'width': 100, "fieldname": "date", 'fieldtype': 'Date'},
-#		{"label": "Item", 'width': 100, "fieldname": "item", 'fieldtype': 'Data'},
-#		{"label": "Description", 'width': 100, "fieldname": "description", 'fieldtype': 'Data'},
-#		{"label": "Qty", 'width': 100, "fieldname": "qty", 'fieldtype': 'Int'},
-#		{"label": "Delivered Qty", 'width': 100, "fieldname": "del_qty", 'fieldtype': 'Int'},
-#		{"label": "Qty To Deliver", 'width': 100, "fieldname": "qty_to_deliver", 'fieldtype': 'Int'},
-#	        {"label": "Rate", "fieldname": "rate", 'fieldtype': 'Float', 'width': 100, 'precision': 0},
-#	        {"label": "Amount", "fieldname": "amount", 'fieldtype': 'Float', 'width': 100, 'precision': 0},
-#	        {"label": "Amount to Deliver", "fieldname": "amount_to_deliver", 'fieldtype': 'Float', 'width': 100, 'precision': 0},
-#		{"label": "Item Delivery Date", 'width': 100, "fieldname": "item_del_date", 'fieldtype': 'Date'},
-#		{"label": "Delay Days", 'width': 100, "fieldname": "delay_days", 'fieldtype': 'Int'},
-#		{"label": "Warehouse", 'width': 100, "fieldname": "warehouse", 'fieldtype': 'Data'},
 		_("Assigned To")+"::50",
 		_("Sales Order")+":Link/Sales Order:100",
 		_("Customer")+":Link/Customer:80",
