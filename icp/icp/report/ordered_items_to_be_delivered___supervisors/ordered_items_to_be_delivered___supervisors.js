@@ -4,7 +4,6 @@
 
 frappe.query_reports["Ordered Items To Be Delivered - Supervisors"] = {
 	"filters": [
-
 	
 		{
                         "fieldname":"assigned_to",
@@ -70,9 +69,5 @@ frappe.query_reports["Ordered Items To Be Delivered - Supervisors"] = {
         ]
 }
 
-// $(function() {
-//      $(wrapper).bind("show", function() {
-//              frappe.query_report.load();
-//      });
-// });
+
 
