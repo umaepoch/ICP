@@ -8,7 +8,7 @@
  "idx": 0, 
  "is_standard": "Yes", 
  "letter_head": "GST Letterhead Unit2", 
- "modified": "2018-01-30 12:22:49.135891", 
+ "modified": "2018-02-03 14:12:29.095699", 
  "modified_by": "Administrator", 
  "module": "Icp", 
  "name": "Ordered Items To Be Delivered Supervisor", 
@@ -29,6 +29,15 @@
   }, 
   {
    "role": "Accounts User"
+  }, 
+  {
+   "role": "Manufacturing User"
+  }, 
+  {
+   "role": "Read all"
+  }, 
+  {
+   "role": "Manufacturing Manager"
   }
  ]
 }
