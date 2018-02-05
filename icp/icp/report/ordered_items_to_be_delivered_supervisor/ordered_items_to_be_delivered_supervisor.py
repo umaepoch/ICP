@@ -29,7 +29,7 @@ def execute(filters=None):
 		else:
 			diff_days = getdate(curr_date) - getdate(qty_dict.item_del_date)
 
-                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.customer_name, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.item_del_date, diff_days, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount_to_deliver, qty_dict.item_group ])
+                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.item_del_date, diff_days, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount_to_deliver, qty_dict.item_group ])
 						 
 	return columns, data 
 
@@ -41,7 +41,6 @@ def get_columns():
 		_("Assigned To")+"::50",
 		_("Sales Order")+":Link/Sales Order:100",
 		_("Customer")+":Link/Customer:80",
-		_("Customer Name")+"::80",
 		_("Date")+":Date:80",
 		_("Item")+":Link/Item:80",
 		_("Description")+"::100",
