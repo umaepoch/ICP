@@ -30,13 +30,13 @@ def get_columns():
         """return columns"""
                
         columns = [
-		_("Sales Invoice #")+":Link/Sales Invoice:100",
+		_("Sales Invoice #")+":Link/Sales Invoice:120",
 		_("Date")+":Date:80",
-		_("Customer Name")+":Link/Customer:100",
-		_("Buyer Order No.")+"::100",
-		_("Delivery at")+"::100",
+		_("Customer Name")+":Link/Customer:110",
+		_("Buyer Order No.")+"::110",
+		_("Delivery at")+"::120",
 		_("Net Total")+":Float:100",
-		_("Sales Order#")+":Link/Sales Order:100",
+		_("Sales Order#")+":Link/Sales Order:130",
 		_("Assigned To")+"::100",
          ]
 
