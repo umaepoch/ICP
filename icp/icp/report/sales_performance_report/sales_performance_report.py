@@ -76,7 +76,7 @@ def get_sales_details(filters):
 	
         return frappe.db.sql("""select sl.name as sales_invoice, so._assign as assigned_to, sl.posting_date as date, sl.customer as customer, sl.buyers_order_ref, sl.delivery_at as delivery_at, sl.net_total as total, so.name as sales_order
                 from `tabSales Invoice Item` sli, `tabSales Invoice` sl, `tabSales Order Item` si, `tabSales Order` so
-                where so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name %s order by sl.name, sl.posting_date asc""" % conditions, as_dict=1)
+                where so.name = si.parent and sl.name = sli.parent and sli.sales_order = so.name and sl.status not in ("Draft", "Cancelled") %s order by sl.name, sl.posting_date asc""" % conditions, as_dict=1)
 
 
 
