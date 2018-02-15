@@ -45,12 +45,12 @@ def get_columns():
 def get_conditions(filters):
         conditions = ""
         if filters.get("from_date"):
-		conditions += " and si.delivery_date >= '%s'" % frappe.db.escape(filters["from_date"])
+		conditions += " and sl.posting_date >= '%s'" % frappe.db.escape(filters["from_date"])
  #       else:
 #		frappe.throw(_("'From Date' is required"))	
 
         if filters.get("to_date"):
-                conditions += " and si.delivery_date <= '%s'" % frappe.db.escape(filters["to_date"])
+                conditions += " and sl.posting_date <= '%s'" % frappe.db.escape(filters["to_date"])
 #        else:
  #               frappe.throw(_("'To Date' is required"))
 
@@ -63,10 +63,10 @@ def get_conditions(filters):
      
 	
 	if filters.get("cust_group"):
-                conditions += " and si.customer_group = '%s'" % frappe.db.escape(filters.get("cust_group"), percent=False)
+                conditions += " and sl.customer_group = '%s'" % frappe.db.escape(filters.get("cust_group"), percent=False)
 
         if filters.get("customer"):
-                conditions += " and si.customer = '%s'" % frappe.db.escape(filters.get("customer"), percent=False)
+                conditions += " and sl.customer = '%s'" % frappe.db.escape(filters.get("customer"), percent=False)
 
 	return conditions
 
