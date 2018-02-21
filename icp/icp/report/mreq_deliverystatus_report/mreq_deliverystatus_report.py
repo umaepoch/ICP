@@ -21,7 +21,7 @@ def execute(filters=None):
         for (material_request, purchase_order, item_code) in sorted(iwb_map):
                 qty_dict = iwb_map[(material_request, purchase_order, item_code)]
                 data.append([
-                        material_request, qty_dict.modifed_by, qty_dict.requested_by, qty_dict.status, qty_dict.docstatus, purchase_order, item_code, qty_dict.description, qty_dict.expected_delivery_date, qty_dict.revised_delivery_date, qty_dict.req_qty, qty_dict.qty, qty_dict.received_qty, 		qty_dict.per_received
+                        material_request, qty_dict.transaction_date, qty_dict.modifed_by, qty_dict.requested_by, qty_dict.status, purchase_order, item_code, qty_dict.description, qty_dict.expected_delivery_date, qty_dict.revised_delivery_date, qty_dict.req_qty, qty_dict.qty, qty_dict.received_qty, qty_dict.per_received
                         
                     ])
 						 
@@ -34,10 +34,10 @@ def get_columns():
         columns = [
 
 		_("Material Request")+"::150",
+                _("Transaction Date")+":Date:100",
 		_("Modified By")+"::150",
 		_("Requested By")+"::140",
 		_("Status")+"::100",
-		_("MR Submitted?")+"::100",
 		_("Linked PO")+"::150",
 		_("Item Code")+"::100",
 		_("Description")+"::100",
@@ -73,12 +73,12 @@ def get_conditions(filters):
 def get_mr_details(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select pi.material_request as material_request, mr.modified_by, mr.requested_by, mr.status, mr.docstatus, pi.parent as purchase_order, pi.item_code as item_code, pi.description as description, pi.expected_delivery_date as expected_delivery_date, pi.revised_delivery_date as revised_delivery_date, mri.qty as req_qty, pi.qty as pi_qty, pi.received_qty as received_qty, (pi.received_qty/pi.qty*100) as per_received from `tabPurchase Order Item` pi, `tabMaterial Request` mr, `tabMaterial Request Item` mri where mr.name = mri.parent and pi.material_request = mr.name and mr.docstatus = "1" %s order by pi.material_request""" % conditions, as_dict=1)
+        return frappe.db.sql("""select pi.material_request as material_request, mr.transaction_date as transaction_date, mr.modified_by, mr.requested_by, mr.status, mr.docstatus, pi.parent as purchase_order, pi.item_code as item_code, pi.description as description, pi.expected_delivery_date as expected_delivery_date, pi.revised_delivery_date as revised_delivery_date, mri.qty as req_qty, pi.qty as pi_qty, pi.received_qty as received_qty, (pi.received_qty/pi.qty*100) as per_received from `tabPurchase Order Item` pi, `tabMaterial Request` mr, `tabMaterial Request Item` mri where mr.name = mri.parent and pi.material_request = mr.name and mr.docstatus = "1" %s order by pi.material_request""" % conditions, as_dict=1)
 
 def get_mr_wo_po(filters):
         conditions = get_conditions(filters)
  
-	return frappe.db.sql("""select mr.name as material_request, mr.modified_by, mr.requested_by, mr.status, mr.docstatus, "" as purchase_order, mri.item_code as item_code, mri.description as description, "" as expected_delivery_date, "" as revised_delivery_date, mri.qty as req_qty, 0 as pi_qty, 0 as received_qty, 0 as per_received from `tabMaterial Request` mr, `tabMaterial Request Item` mri where mr.name = mri.parent and mr.docstatus = "1" %s and not exists (
+	return frappe.db.sql("""select mr.name as material_request, mr.transaction_date as transaction_date, mr.modified_by, mr.requested_by, mr.status, mr.docstatus, "" as purchase_order, mri.item_code as item_code, mri.description as description, "" as expected_delivery_date, "" as revised_delivery_date, mri.qty as req_qty, 0 as pi_qty, 0 as received_qty, 0 as per_received from `tabMaterial Request` mr, `tabMaterial Request Item` mri where mr.name = mri.parent and mr.docstatus = "1" %s and not exists (
                 select 1 from `tabPurchase Order Item` pi where pi.material_request = mr.name) order by mr.name""" % conditions, as_dict=1)
 
 def get_item_map(filters):
@@ -100,6 +100,7 @@ def get_item_map(filters):
         	        qty_dict = iwb_map[(d.material_request, d.purchase_order, d.item_code)]
 
         	        qty_dict.modifed_by = d.modified_by
+			qty_dict.transaction_date = d.transaction_date
 	                qty_dict.requested_by = d.requested_by
 	                qty_dict.status = d.status
 			qty_dict.docstatus = d.docstatus
@@ -122,6 +123,7 @@ def get_item_map(filters):
         	        qty_dict = iwb_map[(d.material_request, d.purchase_order, d.item_code)]
 
         	        qty_dict.modifed_by = d.modified_by
+			qty_dict.transaction_date = d.transaction_date
 	                qty_dict.requested_by = d.requested_by
 	                qty_dict.status = d.status
 			qty_dict.docstatus = d.docstatus
