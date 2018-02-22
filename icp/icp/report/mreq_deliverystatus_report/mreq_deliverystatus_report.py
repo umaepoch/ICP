@@ -41,7 +41,7 @@ def get_columns():
 		_("Linked PO")+"::150",
 		_("Item Code")+"::100",
 		_("Description")+"::100",
-		_("Required By")+"::100",
+		_("Required By Date from Purchase Order Item")+"::100",
                 _("Updated Delivery Date")+":Date:100",
 		_("Requested Qty")+"::100",
 		_("Ordered Qty")+"::100",
