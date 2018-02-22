@@ -1,0 +1,43 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2018-02-22 10:12:23.191527", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "letter_head": "GST Letterhead Unit2", 
+ "modified": "2018-02-22 10:18:03.051497", 
+ "modified_by": "Administrator", 
+ "module": "Icp", 
+ "name": "Purchase Performance Review", 
+ "owner": "Administrator", 
+ "query": "select \npi.material_request as \"Material Request ID:Link/Material Request:120\", \nmr.transaction_date as \"Transaction Date:Date:100\",\nmr.requested_by as \"Requested For::100\",\npi.item_name as \"Item Name::100\",\npi.qty as \"Qty::70\", \npo.name as \"Purchase Order:Link/Purchase Order:100\", \npo.transaction_date as \"PO Date:Date:100\",\npi.schedule_date as \"Reqd by Date:Date:100\", \npr.name as \"Purchase Receipt:Link/Purchase Receipt:100\", \npr.posting_date as \"Purchase Receipt Date:Date:100\", \nDATEDIFF(pr.posting_date, pi.schedule_date) as \"Delay days in Purchase Receipt::100\",\nDATEDIFF(pr.posting_date, mr.transaction_date) as \"Delay days in Material Request to Purchase Receipt::100\"\n\nfrom `tabPurchase Order Item` as pi, `tabPurchase Order` as po, `tabPurchase Receipt` as pr, `tabPurchase Receipt Item` as pri, `tabMaterial Request` mr\n\nwhere po.name = pi.parent and pi.item_code = pri.item_code and po.name = pri.purchase_order and pr.name = pri.parent and pi.name = pri.purchase_order_item and pi.material_request = mr.name\n\norder by pi.material_request;", 
+ "ref_doctype": "Purchase Order", 
+ "report_name": "Purchase Performance Review", 
+ "report_type": "Query Report", 
+ "roles": [
+  {
+   "role": "Accounts Manager"
+  }, 
+  {
+   "role": "Sales User"
+  }, 
+  {
+   "role": "Read all"
+  }, 
+  {
+   "role": "System Manager"
+  }, 
+  {
+   "role": "Sales Invoice Approver"
+  }, 
+  {
+   "role": "Accounts User"
+  }, 
+  {
+   "role": "Customer"
+  }
+ ]
+}
