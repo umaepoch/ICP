@@ -21,7 +21,7 @@ def execute(filters=None):
         for (purchase_order, item_name) in sorted(iwb_map):
                 qty_dict = iwb_map[(purchase_order, item_name)]
 
-                data.append([purchase_order, qty_dict.transaction_date, qty_dict.schedule_date, qty_dict.supplier, qty_dict.qty, qty_dict.recd_qty, qty_dict.item_name, qty_dict.description ])
+                data.append([purchase_order, qty_dict.transaction_date, qty_dict.schedule_date, qty_dict.supplier, qty_dict.qty, qty_dict.recd_qty, (qty_dict.qty - qty_dict.recd_qty), qty_dict.item_name, qty_dict.description ])
 
 						 
 	return columns, data 
@@ -36,6 +36,7 @@ def get_columns():
 		_("Reqd By Date")+":Date:80",
 		_("Supplier Name")+":Link/Customer:110",
 		_("Qty")+"::110",
+		_("Qty to Receive")+"::110",
 		_("Received Qty")+"::120",
 		_("Item Name")+"::130",
 		_("Description")+"::100"
