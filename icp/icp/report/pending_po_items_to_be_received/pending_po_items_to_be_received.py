@@ -16,12 +16,14 @@ def execute(filters=None):
         iwb_map = get_item_map(filters)
 
         data = []
+	qty_to_rcv = 0
 		
 
         for (purchase_order, item_name) in sorted(iwb_map):
                 qty_dict = iwb_map[(purchase_order, item_name)]
-
-                data.append([purchase_order, qty_dict.transaction_date, qty_dict.schedule_date, qty_dict.supplier, qty_dict.qty, (qty_dict.qty - qty_dict.recd_qty), qty_dict.item_name, qty_dict.description ])
+		qty_to_rcv = qty_dict.qty - qty_dict.recd_qty
+		if qty_to_rcv > 0:
+	                data.append([purchase_order, qty_dict.transaction_date, qty_dict.schedule_date, qty_dict.supplier, qty_dict.qty, qty_to_rcv, qty_dict.item_name, qty_dict.description ])
 
 						 
 	return columns, data 
