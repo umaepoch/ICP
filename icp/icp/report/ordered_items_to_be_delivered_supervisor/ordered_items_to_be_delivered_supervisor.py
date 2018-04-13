@@ -41,7 +41,7 @@ def get_columns():
 		_("Assigned To")+"::50",
 		_("Sales Order")+":Link/Sales Order:125",
 		_("Customer")+":Link/Customer:80",
-		_("PO Number")+"::30",
+		_("PO Number")+"::100",
 		_("Date")+":Date:80",
 		_("Item")+":Link/Item:80",
 		_("Description")+"::100",
