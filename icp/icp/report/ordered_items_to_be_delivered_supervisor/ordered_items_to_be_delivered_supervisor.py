@@ -29,7 +29,7 @@ def execute(filters=None):
 		else:
 			diff_days = getdate(curr_date) - getdate(qty_dict.item_del_date)
 
-                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.item_del_date, diff_days, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount_to_deliver, qty_dict.item_group ])
+                data.append([qty_dict.assigned_to, sales_order, qty_dict.customer, qty_dict.po_no, qty_dict.trans_date, item_code,  qty_dict.description, qty_dict.item_del_date, diff_days, qty_dict.qty, qty_dict.delivered_qty, qty_dict.qty_to_deliver, qty_dict.rate, qty_dict.amount_to_deliver, qty_dict.item_group ])
 						 
 	return columns, data 
 
@@ -39,8 +39,9 @@ def get_columns():
                
         columns = [
 		_("Assigned To")+"::50",
-		_("Sales Order")+":Link/Sales Order:100",
+		_("Sales Order")+":Link/Sales Order:125",
 		_("Customer")+":Link/Customer:80",
+		_("PO Number")+"::30",
 		_("Date")+":Date:80",
 		_("Item")+":Link/Item:80",
 		_("Description")+"::100",
@@ -96,7 +97,7 @@ def get_conditions(filters):
 def get_sales_details(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select so._assign as assigned_to, so.name as sales_order, so.customer as customer, so.customer_name as customer_name, so.transaction_date as trans_date, si.item_code as item_code, si.description as description, si.qty as qty, si.delivered_qty as delivered_qty, (si.qty - si.delivered_qty) as qty_to_deliver, si.base_rate as rate, si.base_amount as amount, ((si.qty - si.delivered_qty) * si.base_rate) as amount_to_deliver, si.delivery_date as item_del_date, si.item_group as item_group
+        return frappe.db.sql("""select so._assign as assigned_to, so.name as sales_order, so.customer as customer, so.customer_name as customer_name, so.po_no as po_no, so.transaction_date as trans_date, si.item_code as item_code, si.description as description, si.qty as qty, si.delivered_qty as delivered_qty, (si.qty - si.delivered_qty) as qty_to_deliver, si.base_rate as rate, si.base_amount as amount, ((si.qty - si.delivered_qty) * si.base_rate) as amount_to_deliver, si.delivery_date as item_del_date, si.item_group as item_group
 from
  `tabSales Order` so, `tabSales Order Item` si
 where
@@ -129,6 +130,7 @@ def get_item_map(filters):
 	        qty_dict.sales_order = d.sales_order
 		qty_dict.customer = d.customer
 		qty_dict.customer_name = d.customer_name
+		qty_dict.po_no = d.po_no
 		qty_dict.trans_date = d.trans_date
 		qty_dict.description = d.description
 		qty_dict.qty = d.qty
