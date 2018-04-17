@@ -6,6 +6,15 @@ from frappe.model.mapper import get_mapped_doc
 from erpnext.hr.doctype.leave_application.leave_application \
 	import get_leave_allocation_records, get_leave_balance_on, get_approved_leaves_for_period, get_number_of_leave_days
 
+@frappe.whitelist()
+def get_permitted_documents_po(target_doc=None):
+	user_name = frappe.session.user
+	perm_list = frappe.db.sql("""select series as series from `tabPermitted Series` where document_name = "Purchase Order" and user = %s""", user_name)
+	if perm_list:
+		return perm_list[0][0]
+		
+
+
 
 @frappe.whitelist()
 def get_leave_balance_on(employee, leave_type, date, allocation_records=None,
