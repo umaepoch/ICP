@@ -79,7 +79,7 @@ def get_mr_wo_po(filters):
         conditions = get_conditions(filters)
  
 	return frappe.db.sql("""select mr.name as material_request, mr.transaction_date as transaction_date, mr.modified_by, mr.requested_by, mr.status, mr.docstatus, "" as purchase_order, mri.item_code as item_code, mri.description as description, "" as expected_delivery_date, "" as revised_delivery_date, mri.qty as req_qty, 0 as pi_qty, 0 as received_qty, 0 as per_received from `tabMaterial Request` mr, `tabMaterial Request Item` mri where mr.name = mri.parent and mr.docstatus = "1" %s and not exists (
-                select 1 from `tabPurchase Order Item` pi, `tabMaterial Request Item` mr1 where pi.material_request = mr1.name) order by mr.name""" % conditions, as_dict=1)
+                select 1 from `tabPurchase Order Item` pi where pi.material_request = mr.name) order by mr.name""" % conditions, as_dict=1)
 
 def get_item_map(filters):
         iwb_map = {}
