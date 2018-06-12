@@ -23,7 +23,7 @@ def execute(filters=None):
                 qty_dict = iwb_map[(sales_invoice)]
 
 
-                data.append([sales_invoice, qty_dict.customer, qty_dict.cust_group, qty_dict.posting_date, qty_dict.buyers_order_ref, qty_dict.delivery_at, qty_dict.out_amt, qty_dict.due_date, qty_dict.submitted_to_customer, qty_dict.payment_follow])
+                data.append([sales_invoice, qty_dict.customer, qty_dict.cust_group, qty_dict.posting_date, qty_dict.buyers_order_ref, qty_dict.delivery_at, qty_dict.out_amt, qty_dict.due_date, qty_dict.submitted_to_customer, qty_dict.payment_follow, qty_dict.price_list])
 
 	for rows in data: 
 		diff_data = 0
@@ -39,7 +39,7 @@ def execute(filters=None):
 		if diff_data == 1:		
 								
 			summ_data.append([rows[0], rows[1], rows[2],
-			 	rows[3], rows[4], rows[5], rows[6], rows[7], rows[8], rows[9]				
+			 	rows[3], rows[4], rows[5], rows[6], rows[7], rows[8], rows[9], rows[10]				
  				]) 
 						 
 	return columns, summ_data 
@@ -59,6 +59,7 @@ def get_columns():
 		_("Due Date")+":Date:100",
 		_("Submitted to Customer")+"::100",
 		_("Payment Follow Up Notes")+"::100",
+		_("Price List")+"::100"
          ]
 
         return columns
@@ -85,7 +86,7 @@ def get_conditions(filters):
 def get_sales_details(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select inv.name as sales_invoice, inv.customer, inv.customer_group, inv.posting_date, inv.buyers_order_ref, inv.delivery_at, inv.outstanding_amount, inv.due_date, inv.submitted_to_customer, inv.payment_followup_notes
+        return frappe.db.sql("""select inv.name as sales_invoice, inv.customer, inv.customer_group, inv.posting_date, inv.buyers_order_ref, inv.delivery_at, inv.outstanding_amount, inv.due_date, inv.submitted_to_customer, inv.payment_followup_notes, inv.selling_price_list
                 from `tabSales Invoice` inv
 		where (inv.customer_group = "Signage" or inv.customer_group = "Commercial" or inv.customer_group = "Government") and inv.outstanding_amount > 0 %s
 		order by inv.name, inv.customer, inv.posting_date""" % conditions, as_dict=1)
@@ -120,6 +121,7 @@ def get_item_map(filters):
 		qty_dict.due_date = d.due_date
 		qty_dict.submitted_to_customer = d.submitted_to_customer
 		qty_dict.payment_follow = d.payment_followup_notes
+		qty_dict.price_list = d.selling_price_list
 		
       
         return iwb_map
