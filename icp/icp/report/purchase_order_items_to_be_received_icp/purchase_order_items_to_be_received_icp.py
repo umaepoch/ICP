@@ -21,7 +21,7 @@ def execute(filters=None):
         for (material_request, purchase_order, item_code) in sorted(iwb_map):
                 qty_dict = iwb_map[(material_request, purchase_order, item_code)]
                 data.append([
-                        material_request, qty_dict.transaction_date, qty_dict.requested_by, purchase_order, qty_dict.po_date, qty_dict.reqd_by_date, qty_dict.edd, qty_dict.supplier_name, item_code, qty_dict.description, qty_dict.qty, qty_dict.received_qty, qty_dict.qty_to_receive
+                        material_request, qty_dict.transaction_date, qty_dict.requested_by, purchase_order, qty_dict.po_date, qty_dict.reqd_by_date, qty_dict.edd, qty_dict.supplier_name, item_code, qty_dict.description, qty_dict.uom, qty_dict.qty, qty_dict.received_qty, qty_dict.qty_to_receive
                         
                     ])
 						 
@@ -43,6 +43,7 @@ def get_columns():
 		_("Supplier Name")+"::140",
 		_("Item Code")+"::100",
 		_("Description")+"::100",
+		_("UOM")+"::100",
 		_("Qty")+"::100",
 	        _("Received Qty")+"::100",
 		_("Qty to Receive")+":Float:100"
@@ -77,7 +78,7 @@ def get_conditions(filters):
 def get_mr_details(filters):
         conditions = get_conditions(filters)
 	
-        return frappe.db.sql("""select mr.name as material_request, mr.transaction_date as transaction_date, mr.requested_by as requested_by, po.name as purchase_order, po.transaction_date as po_date, pi.schedule_date as reqd_by_date, pi.expected_delivery_date as edd, po.supplier as supplier_name, pi.item_code as item_code, pi.description as description, pi.qty as qty, pi.received_qty as received_qty, (pi.qty - ifnull(pi.received_qty, 0)) as qty_to_receive
+        return frappe.db.sql("""select mr.name as material_request, mr.transaction_date as transaction_date, mr.requested_by as requested_by, po.name as purchase_order, po.transaction_date as po_date, pi.schedule_date as reqd_by_date, pi.expected_delivery_date as edd, po.supplier as supplier_name, pi.item_code as item_code, pi.description as description, pi.uom as uom, pi.qty as qty, pi.received_qty as received_qty, (pi.qty - ifnull(pi.received_qty, 0)) as qty_to_receive
     
 from
 	`tabPurchase Order` po JOIN `tabPurchase Order Item` pi
@@ -119,6 +120,7 @@ def get_item_map(filters):
 			qty_dict.received_qty = d.received_qty
 			qty_dict.qty = d.pi_qty
 			qty_dict.qty_to_receive = d.qty_to_receive
+			qty_dict.uom = d.uom
 
 
         return iwb_map
