@@ -64,4 +64,18 @@ def get_approved_leaves_for_period(employee, leave_type, from_date, to_date):
 
 	return leave_days
 
+@frappe.whitelist()
+def fetch_salary_detail(parent):
+	total_basic_da = 0
+	salary_details = frappe.db.sql(""" select amount,salary_component from `tabSalary Detail` where parent=%s and 
+					parentfield='earnings' """, parent, as_dict=1)
+	if len(salary_details)!=0:
+		for data in salary_details:
+			amount = data['amount']
+			salary_component = data['salary_component']
+			if salary_component == 'Basic':
+				total_basic_da = float(total_basic_da) + float(amount)
+			elif salary_component == 'DA':
+				total_basic_da = float(total_basic_da) + float(amount)
+	return total_basic_da
 
