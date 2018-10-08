@@ -75,7 +75,28 @@ def fetch_salary_detail(parent):
 			salary_component = data['salary_component']
 			if salary_component == 'Basic':
 				total_basic_da = float(total_basic_da) + float(amount)
-			elif salary_component == 'DA':
+			if salary_component == 'DA':
 				total_basic_da = float(total_basic_da) + float(amount)
 	return total_basic_da
+
+@frappe.whitelist()
+def fetch_total_basic_da_hra(parent):
+	total_basic_da_hra = 0
+	salary_details = frappe.db.sql(""" select amount,salary_component from `tabSalary Detail` where parent=%s and 
+					parentfield='earnings' """, parent, as_dict=1)
+	if len(salary_details)!=0:
+		for data in salary_details:
+			amount = data['amount']
+			salary_component = data['salary_component']
+			if salary_component == 'Basic':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'DA':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'House Rent Allowance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'Conveyance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'Special Allowance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+	return total_basic_da_hra
 
