@@ -64,3 +64,63 @@ def get_approved_leaves_for_period(employee, leave_type, from_date, to_date):
 
 	return leave_days
 
+def get_employee_basic_sal(salary_structure,employee):
+	salary_details = frappe.db.sql(""" select base from `tabSalary Structure Employee` where parent=%s and employee=%s""", 						(salary_structure,employee), as_dict=1)
+	if salary_details[0]['base'] is not None:
+		return salary_details[0]['base']
+	else:
+		return None
+
+@frappe.whitelist()
+def fetch_salary_detail(salary_structure,employee):
+	total_basic_da = 0
+	salary_details = frappe.db.sql(""" select amount,salary_component,formula from `tabSalary Detail` where parent=%s and 
+					parentfield='earnings' """, salary_structure, as_dict=1)
+	if len(salary_details)!=0:
+		if salary_structure == "StaffMT16K":
+			basic = 0
+			da = 0
+			base_sal = get_employee_basic_sal(salary_structure,employee)
+			if base_sal:
+				basic = float(base_sal) * (.37)
+				da = float(base_sal) * (.17)
+			total_basic_da = basic + da
+		elif salary_structure == "StaffBelow16K":
+			for data in salary_details:
+				amount = data['formula']
+				salary_component = data['salary_component']
+				if salary_component == 'Basic':
+					total_basic_da = float(total_basic_da) + float(amount)
+				if salary_component == 'DA':
+					total_basic_da = float(total_basic_da) + float(amount)
+		else:
+			for data in salary_details:
+				amount = data['amount']
+				salary_component = data['salary_component']
+				if salary_component == 'Basic':
+					total_basic_da = float(total_basic_da) + float(amount)
+				if salary_component == 'DA':
+					total_basic_da = float(total_basic_da) + float(amount)
+	return total_basic_da
+
+@frappe.whitelist()
+def fetch_total_basic_da_hra(parent):
+	total_basic_da_hra = 0
+	salary_details = frappe.db.sql(""" select amount,salary_component from `tabSalary Detail` where parent=%s and 
+					parentfield='earnings' """, parent, as_dict=1)
+	if len(salary_details)!=0:
+		for data in salary_details:
+			amount = data['amount']
+			salary_component = data['salary_component']
+			if salary_component == 'Basic':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'DA':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'House Rent Allowance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'Conveyance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+			if salary_component == 'Special Allowance':
+				total_basic_da_hra = float(total_basic_da_hra) + float(amount)
+	return total_basic_da_hra
+
